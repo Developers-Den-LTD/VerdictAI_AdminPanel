@@ -131,37 +131,6 @@ const UserDropdown = props => {
             My Profile
           </Box>
         </MenuItemStyled>
-        <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/email')}>
-          <Box sx={styles}>
-            <Icon icon='tabler:mail' />
-            Inbox
-          </Box>
-        </MenuItemStyled>
-        <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/chat')}>
-          <Box sx={styles}>
-            <Icon icon='tabler:message-2' />
-            Chat
-          </Box>
-        </MenuItemStyled>
-        <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
-        <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/account-settings/account')}>
-          <Box sx={styles}>
-            <Icon icon='tabler:settings' />
-            Settings
-          </Box>
-        </MenuItemStyled>
-        <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/pricing')}>
-          <Box sx={styles}>
-            <Icon icon='tabler:currency-dollar' />
-            Pricing
-          </Box>
-        </MenuItemStyled>
-        <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/faq')}>
-          <Box sx={styles}>
-            <Icon icon='tabler:help' />
-            FAQ
-          </Box>
-        </MenuItemStyled>
         <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
         <MenuItemStyled onClick={handleLogout} sx={{ py: 2, '& svg': { mr: 2, fontSize: '1.375rem' } }}>
           <Icon icon='tabler:logout' />

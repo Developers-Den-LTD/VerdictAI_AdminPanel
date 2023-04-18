@@ -29,109 +29,6 @@ import Icon from 'src/@core/components/icon'
 // ** Configs Imports
 import themeConfig from 'src/configs/themeConfig'
 
-const defaultSuggestionsData = [
-  {
-    category: 'Popular Searches',
-    suggestions: [
-      {
-        icon: 'tabler:chart-pie-2',
-        suggestion: 'Analytics',
-        link: '/dashboards/analytics'
-      },
-      {
-        icon: 'tabler:device-analytics',
-        suggestion: 'CRM',
-        link: '/dashboards/crm'
-      },
-      {
-        icon: 'tabler:shopping-cart',
-        suggestion: 'eCommerce',
-        link: '/dashboards/ecommerce'
-      },
-      {
-        icon: 'tabler:users',
-        suggestion: 'User List',
-        link: '/apps/user/list'
-      }
-    ]
-  },
-  {
-    category: 'Apps & Pages',
-    suggestions: [
-      {
-        icon: 'tabler:calendar',
-        suggestion: 'Calendar',
-        link: '/apps/calendar'
-      },
-      {
-        icon: 'tabler:list-numbers',
-        suggestion: 'Invoice List',
-        link: '/apps/invoice/list'
-      },
-      {
-        icon: 'tabler:currency-dollar',
-        suggestion: 'Pricing',
-        link: '/pages/pricing'
-      },
-      {
-        icon: 'tabler:settings',
-        suggestion: 'Account Settings',
-        link: '/pages/account-settings/account'
-      }
-    ]
-  },
-  {
-    category: 'User Interface',
-    suggestions: [
-      {
-        icon: 'tabler:typography',
-        suggestion: 'Typography',
-        link: '/ui/typography'
-      },
-      {
-        icon: 'tabler:browser',
-        suggestion: 'Tabs',
-        link: '/components/tabs'
-      },
-      {
-        icon: 'tabler:hand-click',
-        suggestion: 'Buttons',
-        link: '/components/buttons'
-      },
-      {
-        icon: 'tabler:id',
-        suggestion: 'Advanced Cards',
-        link: '/ui/cards/advanced'
-      }
-    ]
-  },
-  {
-    category: 'Forms & Tables',
-    suggestions: [
-      {
-        icon: 'tabler:list-check',
-        suggestion: 'Select',
-        link: '/forms/form-elements/select'
-      },
-      {
-        icon: 'tabler:space',
-        suggestion: 'Autocomplete',
-        link: '/forms/form-elements/autocomplete'
-      },
-      {
-        icon: 'tabler:layout-grid',
-        suggestion: 'Table',
-        link: '/tables/mui'
-      },
-      {
-        icon: 'tabler:calendar-event',
-        suggestion: 'Date Pickers',
-        link: '/forms/form-elements/pickers'
-      }
-    ]
-  }
-]
-
 const categoryTitle = {
   dashboards: 'Dashboards',
   appsPages: 'Apps & Pages',
@@ -293,44 +190,6 @@ const NoResult = ({ value, setOpenDialog }) => {
         </ListItem>
       </List>
     </Box>
-  )
-}
-
-const DefaultSuggestions = ({ setOpenDialog }) => {
-  return (
-    <Grid container spacing={6} sx={{ ml: 0 }}>
-      {defaultSuggestionsData.map((item, index) => (
-        <Grid item xs={12} sm={6} key={index}>
-          <Typography component='p' variant='overline' sx={{ lineHeight: 1.25, color: 'text.disabled' }}>
-            {item.category}
-          </Typography>
-          <List sx={{ py: 2.5 }}>
-            {item.suggestions.map((suggestionItem, index2) => (
-              <ListItem key={index2} sx={{ py: 2 }} disablePadding>
-                <Box
-                  component={Link}
-                  href={suggestionItem.link}
-                  onClick={() => setOpenDialog(false)}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    '& svg': { mr: 2.5 },
-                    color: 'text.primary',
-                    textDecoration: 'none',
-                    '&:hover > *': { color: 'primary.main' }
-                  }}
-                >
-                  <Icon icon={suggestionItem.icon} fontSize='1.25rem' />
-                  <Typography variant='body2' sx={{ color: 'text.primary' }}>
-                    {suggestionItem.suggestion}
-                  </Typography>
-                </Box>
-              </ListItem>
-            ))}
-          </List>
-        </Grid>
-      ))}
-    </Grid>
   )
 }
 
@@ -529,21 +388,6 @@ const AutocompleteComponent = ({ hidden, settings }) => {
                 }}
               />
             </Box>
-            {searchValue.length === 0 ? (
-              <Box
-                sx={{
-                  p: 10,
-                  display: 'grid',
-                  overflow: 'auto',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderTop: `1px solid ${theme.palette.divider}`,
-                  height: fullScreenDialog ? 'calc(100vh - 69px)' : '100%'
-                }}
-              >
-                <DefaultSuggestions setOpenDialog={setOpenDialog} />
-              </Box>
-            ) : null}
           </Dialog>
         )}
       </Box>

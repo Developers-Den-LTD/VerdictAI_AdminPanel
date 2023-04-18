@@ -249,7 +249,7 @@ const columns = [
   }
 ]
 
-const UserList = ({ apiData }) => {
+const UserList = () => {
   // ** State
   const [role, setRole] = useState('')
   const [plan, setPlan] = useState('')
@@ -275,102 +275,13 @@ const UserList = ({ apiData }) => {
   const handleFilter = useCallback(val => {
     setValue(val)
   }, [])
-
-  const handleRoleChange = useCallback(e => {
-    setRole(e.target.value)
-  }, [])
-
-  const handlePlanChange = useCallback(e => {
-    setPlan(e.target.value)
-  }, [])
-
-  const handleStatusChange = useCallback(e => {
-    setStatus(e.target.value)
-  }, [])
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
 
   return (
     <Grid container spacing={6.5}>
       <Grid item xs={12}>
-        {apiData && (
-          <Grid container spacing={6}>
-            {apiData.statsHorizontalWithDetails.map((item, index) => {
-              return (
-                <Grid item xs={12} md={3} sm={6} key={index}>
-                  <CardStatsHorizontalWithDetails {...item} />
-                </Grid>
-              )
-            })}
-          </Grid>
-        )}
-      </Grid>
-      <Grid item xs={12}>
         <Card>
-          <CardHeader title='Search Filters' />
-          <CardContent>
-            <Grid container spacing={6}>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='role-select'>Select Role</InputLabel>
-                  <Select
-                    fullWidth
-                    value={role}
-                    id='select-role'
-                    label='Select Role'
-                    labelId='role-select'
-                    onChange={handleRoleChange}
-                    inputProps={{ placeholder: 'Select Role' }}
-                  >
-                    <MenuItem value=''>Select Role</MenuItem>
-                    <MenuItem value='admin'>Admin</MenuItem>
-                    <MenuItem value='author'>Author</MenuItem>
-                    <MenuItem value='editor'>Editor</MenuItem>
-                    <MenuItem value='maintainer'>Maintainer</MenuItem>
-                    <MenuItem value='subscriber'>Subscriber</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='plan-select'>Select Plan</InputLabel>
-                  <Select
-                    fullWidth
-                    value={plan}
-                    id='select-plan'
-                    label='Select Plan'
-                    labelId='plan-select'
-                    onChange={handlePlanChange}
-                    inputProps={{ placeholder: 'Select Plan' }}
-                  >
-                    <MenuItem value=''>Select Plan</MenuItem>
-                    <MenuItem value='basic'>Basic</MenuItem>
-                    <MenuItem value='company'>Company</MenuItem>
-                    <MenuItem value='enterprise'>Enterprise</MenuItem>
-                    <MenuItem value='team'>Team</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='status-select'>Select Status</InputLabel>
-                  <Select
-                    fullWidth
-                    value={status}
-                    id='select-status'
-                    label='Select Status'
-                    labelId='status-select'
-                    onChange={handleStatusChange}
-                    inputProps={{ placeholder: 'Select Role' }}
-                  >
-                    <MenuItem value=''>Select Role</MenuItem>
-                    <MenuItem value='pending'>Pending</MenuItem>
-                    <MenuItem value='active'>Active</MenuItem>
-                    <MenuItem value='inactive'>Inactive</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </CardContent>
+          <CardHeader title='All Admins' />
           <Divider sx={{ m: '0 !important' }} />
           <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
           <DataGrid
@@ -389,17 +300,6 @@ const UserList = ({ apiData }) => {
       <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />
     </Grid>
   )
-}
-
-export const getStaticProps = async () => {
-  const res = await axios.get('/cards/statistics')
-  const apiData = res.data
-
-  return {
-    props: {
-      apiData
-    }
-  }
 }
 
 export default UserList
