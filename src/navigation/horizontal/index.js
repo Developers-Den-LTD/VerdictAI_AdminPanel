@@ -5,19 +5,13 @@ const navigation = () => {
       title: 'Dashboards',
       children: [
         {
-          icon: 'tabler:chart-pie-2',
           title: 'Analytics',
           path: '/dashboards/analytics'
         },
         {
-          icon: 'tabler:device-analytics',
-          title: 'CRM',
-          path: '/dashboards/crm'
-        },
-        {
-          icon: 'tabler:shopping-cart',
-          title: 'eCommerce',
-          path: '/dashboards/ecommerce'
+          title: 'Admins',
+          icon: 'tabler:user',
+          path: '/dashboards/admins'
         }
       ]
     },
@@ -128,7 +122,6 @@ const navigation = () => {
           icon: 'tabler:brand-tabler'
         },
         {
-          
           title: 'Cards',
           icon: 'tabler:id',
           children: [
@@ -233,7 +226,7 @@ const navigation = () => {
             {
               title: 'More',
               path: '/components/more'
-            },
+            }
           ]
         }
       ]
@@ -526,7 +519,7 @@ const navigation = () => {
             {
               title: 'Input Mask',
               path: '/forms/form-elements/input-mask'
-            },
+            }
           ]
         },
         {
