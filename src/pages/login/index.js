@@ -83,7 +83,7 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
+  userName: yup.string().min(5).required(),
   password: yup.string().min(5).required()
 })
 
@@ -119,10 +119,10 @@ const LoginPage = () => {
 
   const onSubmit = data => {
     const { userName, password } = data
-    auth.login({ email, password, rememberMe }, () => {
+    auth.login({ userName, password, rememberMe }, () => {
       setError('userName', {
         type: 'manual',
-        message: 'Email or Password is invalid'
+        message: 'Username or Password is invalid'
       })
     })
   }
@@ -212,7 +212,7 @@ const LoginPage = () => {
                     />
                   )}
                 />
-                {errors.email && (
+                {errors.userName && (
                   <FormHelperText sx={{ color: 'error.main' }}>{errors.userName.message}</FormHelperText>
                 )}
               </FormControl>
