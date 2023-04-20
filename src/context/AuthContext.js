@@ -19,7 +19,6 @@ const defaultProvider = {
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
-  register: () => Promise.resolve(),
   getAuthToken: () => Promise.resolve()
 }
 const AuthContext = createContext(defaultProvider)
@@ -55,9 +54,20 @@ const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // ** Call the following function when and check which type
+  // ** Of user is trying to login
   const handleLogin = (params, errorCallback) => {
+    if (params.loginAs == 'superAdmin') {
+      handleSuperAdminLogin(params)
+    } else if (params.loginAs == 'admin') {
+      handleAdminLogin(params)
+    }
+  }
+
+  //handle super-admin login
+  function handleSuperAdminLogin(params) {
     axios
-      .post(authConfig.loginEndpoint, { username: params.userName, password: params.password })
+      .post(authConfig.superAdminLoginEndpoint, { username: params.userName, password: params.password })
       .then(async response => {
         console.log(response)
         if (response.data.responseCode != 2000) {
@@ -75,12 +85,44 @@ const AuthProvider = ({ children }) => {
           token: response.data.response.accesstoken.token,
           expiry: response.data.response.accesstoken.expiry
         }
-        params.rememberMe
-          ? window.localStorage.setItem(authConfig.storageTokenKeyName, JSON.stringify(tokenData))
-          : null
+        window.localStorage.setItem(authConfig.storageTokenKeyName, JSON.stringify(tokenData))
+        window.localStorage.setItem('userData', JSON.stringify(userData))
         const returnUrl = router.query.returnUrl
         setUser(userData)
-        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(userData)) : null
+        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+        router.replace(redirectURL)
+      })
+      .catch(err => {
+        console.log(err)
+        if (errorCallback) errorCallback(err)
+      })
+  }
+
+  //handle admin login
+  function handleAdminLogin(params) {
+    axios
+      .post(authConfig.adminLoginEndpoint, { username: params.userName, password: params.password })
+      .then(async response => {
+        console.log(response)
+        if (response.data.responseCode != 2000) {
+          return errorCallback('userName')
+        }
+        const res = response.data.response
+
+        const userData = {
+          userName: res.adminUsername,
+          name: res.adminName,
+          role: res.isSuperAdmin ? 'superadmin' : 'admin'
+        }
+
+        const tokenData = {
+          token: response.data.response.accesstoken.token,
+          expiry: response.data.response.accesstoken.expiry
+        }
+        window.localStorage.setItem(authConfig.storageTokenKeyName, JSON.stringify(tokenData))
+        window.localStorage.setItem('userData', JSON.stringify(userData))
+        const returnUrl = router.query.returnUrl
+        setUser(userData)
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
         router.replace(redirectURL)
       })
@@ -95,19 +137,6 @@ const AuthProvider = ({ children }) => {
     window.localStorage.removeItem('userData')
     window.localStorage.removeItem(authConfig.storageTokenKeyName)
     router.push('/login')
-  }
-
-  const handleRegister = (params, errorCallback) => {
-    axios
-      .post(authConfig.registerEndpoint, params)
-      .then(res => {
-        if (res.data.error) {
-          if (errorCallback) errorCallback(res.data.error)
-        } else {
-          handleLogin({ email: params.email, password: params.password })
-        }
-      })
-      .catch(err => (errorCallback ? errorCallback(err) : null))
   }
 
   const getAuthToken = () => {
@@ -146,7 +175,6 @@ const AuthProvider = ({ children }) => {
     setLoading,
     login: handleLogin,
     logout: handleLogout,
-    register: handleRegister,
     getAuthToken: getAuthToken
   }
 

@@ -19,6 +19,10 @@ import { styled, useTheme } from '@mui/material/styles'
 import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel from '@mui/material/FormControlLabel'
+import Grid from '@mui/material/Grid'
+import Radio from '@mui/material/Radio'
+import FormLabel from '@mui/material/FormLabel'
+import RadioGroup from '@mui/material/RadioGroup'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -84,16 +88,17 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 
 const schema = yup.object().shape({
   userName: yup.string().min(5).required(),
-  password: yup.string().min(5).required()
+  password: yup.string().min(5).required(),
+  loginAs: yup.string().required()
 })
 
 const defaultValues = {
   password: 'sAdmin@VerdictAi',
-  userName: 'superadmin'
+  userName: 'superadmin',
+  loginAs: 'superAdmin'
 }
 
 const LoginPage = () => {
-  const [rememberMe, setRememberMe] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
 
   // ** Hooks
@@ -118,11 +123,11 @@ const LoginPage = () => {
   })
 
   const onSubmit = data => {
-    const { userName, password } = data
-    auth.login({ userName, password, rememberMe }, () => {
-      setError('userName', {
+    const { userName, password, loginAs } = data
+    auth.login({ userName, password, loginAs }, () => {
+      setError('credentials', {
         type: 'manual',
-        message: 'Username or Password is invalid'
+        message: 'Username, Password or type selection is invalid'
       })
     })
   }
@@ -253,21 +258,42 @@ const LoginPage = () => {
                   </FormHelperText>
                 )}
               </FormControl>
-              <Box
-                sx={{
-                  mb: 1.75,
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <FormControlLabel
-                  label='Remember Me'
-                  control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />}
-                />
-                <LinkStyled href='/forgot-password'>Forgot Password?</LinkStyled>
-              </Box>
+              <Grid item xs={12}>
+                <FormControl error={Boolean(errors.radio)}>
+                  <FormLabel>Login As: </FormLabel>
+                  <Controller
+                    name='loginAs'
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <RadioGroup row {...field} aria-label='loginAs' name='validation-basic-radio'>
+                        <FormControlLabel
+                          value='superAdmin'
+                          label='Super-admin'
+                          sx={errors.radio ? { color: 'error.main' } : null}
+                          control={<Radio sx={errors.loginAs ? { color: 'error.main' } : null} />}
+                        />
+                        <FormControlLabel
+                          value='admin'
+                          label='Admin'
+                          sx={errors.radio ? { color: 'error.main' } : null}
+                          control={<Radio sx={errors.loginAs ? { color: 'error.main' } : null} />}
+                        />
+                      </RadioGroup>
+                    )}
+                  />
+                  {errors.loginAs && (
+                    <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-radio'>
+                      This field is required
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              {errors.credentials && (
+                <FormHelperText sx={{ color: 'error.main', fontSize: 14, marginBottom: 2 }} id=''>
+                  {errors.credentials.message}
+                </FormHelperText>
+              )}
               <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 4 }}>
                 Login
               </Button>
