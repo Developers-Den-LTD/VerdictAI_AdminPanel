@@ -11,8 +11,7 @@ import Spinner from 'src/@core/components/spinner'
 import { useAuth } from 'src/hooks/useAuth'
 
 export const getHomeRoute = role => {
-  if (role === 'client') return '/acl'
-  else return '/home'
+  return '/dashboard/admins'
 }
 
 const Home = () => {

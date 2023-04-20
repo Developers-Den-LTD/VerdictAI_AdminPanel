@@ -6,7 +6,7 @@ export const API_URL = 'https://api.verdict.com/api/admin/'
 export async function getAllAdmins(token) {
   var config = {
     method: 'get',
-    url: 'https://api.verdict.com/api/admin/',
+    url: API_URL,
     headers: {
       'x-access-token': token
     }
@@ -16,6 +16,38 @@ export async function getAllAdmins(token) {
     .then(response => {
       if (response.data.responseCode == 2000) {
         return { data: response.data.response }
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
+
+//create a new admin function call
+export async function createAdmin(userName, name, password, token) {
+  var data = {
+    username: userName,
+    password: password,
+    name: name
+  }
+
+  var config = {
+    method: 'post',
+    url: API_URL + 'create-admin',
+    headers: {
+      'x-access-token': token
+    },
+    data: data
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return true
       } else {
         return { error: 'Some error occured!:' + response.data.responseCode }
       }

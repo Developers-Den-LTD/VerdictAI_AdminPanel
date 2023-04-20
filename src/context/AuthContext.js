@@ -58,14 +58,14 @@ const AuthProvider = ({ children }) => {
   // ** Of user is trying to login
   const handleLogin = (params, errorCallback) => {
     if (params.loginAs == 'superAdmin') {
-      handleSuperAdminLogin(params)
+      handleSuperAdminLogin(params, errorCallback)
     } else if (params.loginAs == 'admin') {
-      handleAdminLogin(params)
+      handleAdminLogin(params, errorCallback)
     }
   }
 
   //handle super-admin login
-  function handleSuperAdminLogin(params) {
+  function handleSuperAdminLogin(params, errorCallback) {
     axios
       .post(authConfig.superAdminLoginEndpoint, { username: params.userName, password: params.password })
       .then(async response => {
@@ -99,7 +99,7 @@ const AuthProvider = ({ children }) => {
   }
 
   //handle admin login
-  function handleAdminLogin(params) {
+  function handleAdminLogin(params, errorCallback) {
     axios
       .post(authConfig.adminLoginEndpoint, { username: params.userName, password: params.password })
       .then(async response => {

@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import PageHeader from 'src/@core/components/page-header'
 
 // ** Demo Components Imports
-import FormValidationBasicAdmin from 'src/views/forms/form-validation/FormValidationBasicAdmin'
+import CreateAdminValidationForm from 'src/views/forms/form-validation/CreateAdminValidationForm'
 
 // ** Styled Component
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
@@ -25,7 +25,7 @@ const AddNewAdmin = () => {
           subtitle={<Typography variant='body2'>Please fill out the details for admin</Typography>}
         />
         <Grid item xs={12}>
-          <FormValidationBasicAdmin />
+          <CreateAdminValidationForm />
         </Grid>
       </Grid>
     </DatePickerWrapper>
