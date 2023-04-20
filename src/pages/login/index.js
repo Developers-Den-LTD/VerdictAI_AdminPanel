@@ -88,8 +88,8 @@ const schema = yup.object().shape({
 })
 
 const defaultValues = {
-  password: 'admin',
-  userName: 'admin@verdictAi'
+  password: 'sAdmin@VerdictAi',
+  userName: 'superadmin'
 }
 
 const LoginPage = () => {

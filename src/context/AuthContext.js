@@ -55,16 +55,24 @@ const AuthProvider = ({ children }) => {
         if (response.data.responseCode != 2000) {
           return errorCallback('userName')
         }
+        const res = response.data.response
+
+        const userData = {
+          userName: res.adminUsername,
+          name: res.adminName,
+          role: res.isSuperAdmin ? 'superadmin' : 'admin'
+        }
         params.rememberMe
           ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.response.accesstoken.token)
           : null
         const returnUrl = router.query.returnUrl
-        setUser({ ...response.data.response })
-        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.response)) : null
+        setUser(userData)
+        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(userData)) : null
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
         router.replace(redirectURL)
       })
       .catch(err => {
+        console.log(err)
         if (errorCallback) errorCallback(err)
       })
   }
