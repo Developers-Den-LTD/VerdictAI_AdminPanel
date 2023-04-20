@@ -37,7 +37,7 @@ const AuthProvider = ({ children }) => {
       console.log(userDataCheck)
       if (storedToken) {
         setLoading(true)
-        setUser(userDataCheck)
+        setUser(JSON.parse(userDataCheck))
         setLoading(false)
       } else {
         setLoading(false)

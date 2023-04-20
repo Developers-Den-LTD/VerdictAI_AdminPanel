@@ -1,14 +1,14 @@
 const navigation = () => {
   return [
     {
-      title: 'Home',
-      path: '/home',
+      title: 'Admins',
+      path: '/dashboard/admins',
       icon: 'tabler:smart-home'
     },
     {
-      title: 'Second Page',
-      path: '/second-page',
-      icon: 'tabler:mail'
+      title: 'Add New Admin',
+      path: '/dashboard/add-new-admin',
+      icon: 'tabler:user'
     }
   ]
 }

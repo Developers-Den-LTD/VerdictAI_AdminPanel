@@ -26,6 +26,15 @@ const AuthGuard = props => {
           router.replace('/login')
         }
       }
+
+      // else {
+      //   //if the user is on home then navigae to dashboard
+      //   if (router.asPath == '/') {
+      //     router.replace({
+      //       pathname: '/dashboard/admins'
+      //     })
+      //   }
+      // }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [router.route]
