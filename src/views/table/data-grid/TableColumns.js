@@ -1,19 +1,25 @@
 // ** React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
+// ** Next Imports
+import Link from 'next/link'
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid } from '@mui/x-data-grid'
 
-// ** Third Party Components
-import toast from 'react-hot-toast'
+// ** MUI Imports
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import IconButton from '@mui/material/IconButton'
+
+// ** Icon Imports
+import Icon from 'src/@core/components/icon'
 
 // ** Custom Components
-import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Utils Import
@@ -36,121 +42,70 @@ const renderClient = params => {
   }
 }
 
-const statusObj = {
-  1: { title: 'current', color: 'primary' },
-  2: { title: 'professional', color: 'success' },
-  3: { title: 'rejected', color: 'error' },
-  4: { title: 'resigned', color: 'warning' },
-  5: { title: 'applied', color: 'info' }
+const RowOptions = ({ id }) => {
+  // ** State
+  const [anchorEl, setAnchorEl] = useState(null)
+  const rowOptionsOpen = Boolean(anchorEl)
+
+  const handleRowOptionsClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleRowOptionsClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleDelete = () => {
+    dispatch(deleteUser(id))
+    handleRowOptionsClose()
+  }
+
+  return (
+    <>
+      <MenuItem onClick={handleRowOptionsClose} sx={{ '& svg': { mr: 2 } }}>
+        <Icon icon='tabler:edit' fontSize={20} />
+        Edit
+      </MenuItem>
+      <MenuItem onClick={handleDelete} sx={{ '& svg': { mr: 2 } }}>
+        <Icon icon='tabler:trash' fontSize={20} />
+        Delete
+      </MenuItem>
+    </>
+  )
 }
 
-// ** Full Name Getter
-const getFullName = params =>
-  toast(
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      {renderClient(params)}
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-          {params.row.full_name}
-        </Typography>
-      </Box>
-    </Box>
-  )
-
-const TableColumns = () => {
+const TableColumns = props => {
   // ** States
-  const [pageSize, setPageSize] = useState(7)
   const [hideNameColumn, setHideNameColumn] = useState(false)
 
   const columns = [
     {
-      flex: 0.25,
-      minWidth: 290,
-      field: 'full_name',
-      headerName: 'Name',
-      renderCell: params => {
-        const { row } = params
-
-        return (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {renderClient(params)}
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                {row.full_name}
-              </Typography>
-              <Typography noWrap variant='caption'>
-                {row.email}
-              </Typography>
-            </Box>
-          </Box>
-        )
-      }
-    },
-    {
       flex: 0.175,
       minWidth: 120,
-      headerName: 'Date',
-      field: 'start_date',
+      headerName: 'userName',
+      field: 'userName',
       renderCell: params => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {params.row.start_date}
+          {params.row.adminUserName}
         </Typography>
       )
     },
     {
       flex: 0.15,
       minWidth: 110,
-      field: 'salary',
-      headerName: 'Salary',
+      field: 'Name',
       renderCell: params => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {params.row.salary}
+          {params.row.adminName}
         </Typography>
       )
-    },
-    {
-      flex: 0.1,
-      field: 'age',
-      minWidth: 80,
-      headerName: 'Age',
-      renderCell: params => (
-        <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {params.row.age}
-        </Typography>
-      )
-    },
-    {
-      flex: 0.2,
-      minWidth: 140,
-      field: 'status',
-      headerName: 'Status',
-      renderCell: params => {
-        const status = statusObj[params.row.status]
-
-        return (
-          <CustomChip
-            rounded
-            size='small'
-            skin='light'
-            color={status.color}
-            label={status.title}
-            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-          />
-        )
-      }
     },
     {
       flex: 0.125,
       minWidth: 140,
       field: 'actions',
       headerName: 'Actions',
-      renderCell: params => {
-        return (
-          <Button size='small' variant='outlined' color='secondary' onClick={() => getFullName(params)}>
-            Get Name
-          </Button>
-        )
-      }
+      renderCell: params => <RowOptions id={params.row.adminName} />
     }
   ]
 
@@ -168,14 +123,10 @@ const TableColumns = () => {
       />
       <DataGrid
         autoHeight
-        rows={() => {
-          return {}
-        }}
+        rows={props.row || []}
         columns={columns}
-        pageSize={pageSize}
         disableSelectionOnClick
-        rowsPerPageOptions={[7, 10, 25, 50]}
-        onPageSizeChange={newPageSize => setPageSize(newPageSize)}
+        getRowId={row => ({ id: row.userName })}
       />
     </Card>
   )

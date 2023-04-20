@@ -18,7 +18,8 @@ const defaultProvider = {
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
-  register: () => Promise.resolve()
+  register: () => Promise.resolve(),
+  getAuthToken: () => Promise.resolve()
 }
 const AuthContext = createContext(defaultProvider)
 
@@ -97,6 +98,12 @@ const AuthProvider = ({ children }) => {
       .catch(err => (errorCallback ? errorCallback(err) : null))
   }
 
+  const getAuthToken = () => {
+    return window.localStorage.getItem(authConfig.storageTokenKeyName)
+      ? window.localStorage.getItem(authConfig.storageTokenKeyName)
+      : null
+  }
+
   const values = {
     user,
     loading,
@@ -104,7 +111,8 @@ const AuthProvider = ({ children }) => {
     setLoading,
     login: handleLogin,
     logout: handleLogout,
-    register: handleRegister
+    register: handleRegister,
+    getAuthToken: getAuthToken
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

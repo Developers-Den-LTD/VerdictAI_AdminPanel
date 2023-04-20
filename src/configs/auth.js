@@ -1,4 +1,4 @@
-const API_URL = 'https://api.verdict.com/api/admin/'
+import { API_URL } from '../../Client/request'
 
 export default {
   meEndpoint: '/auth/me',
