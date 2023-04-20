@@ -42,28 +42,13 @@ const renderClient = params => {
 
 const RowOptions = ({ id }) => {
   // ** State
-  const [anchorEl, setAnchorEl] = useState(null)
-  const rowOptionsOpen = Boolean(anchorEl)
-
-  const handleRowOptionsClick = event => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleRowOptionsClose = () => {
-    setAnchorEl(null)
-  }
 
   const handleDelete = () => {
-    dispatch(deleteUser(id))
-    handleRowOptionsClose()
+    // dispatch(deleteUser(id))
   }
 
   return (
     <>
-      <MenuItem onClick={handleRowOptionsClose} sx={{ '& svg': { mr: 2 } }}>
-        <Icon icon='tabler:edit' fontSize={20} />
-        Edit
-      </MenuItem>
       <MenuItem onClick={handleDelete} sx={{ '& svg': { mr: 2 } }}>
         <Icon icon='tabler:trash' fontSize={20} />
         Delete
@@ -113,9 +98,11 @@ const TableColumns = props => {
         title='All Admins'
         action={
           <div>
-            <Button size='small' variant='contained' Link='/dashboard/add-new-admin'>
-              Add New Admin
-            </Button>
+            <Link href='/dashboard/add-new-admin'>
+              <Button size='small' variant='contained'>
+                Add New Admin
+              </Button>
+            </Link>
           </div>
         }
       />
