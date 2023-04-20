@@ -9,8 +9,6 @@ import NProgress from 'nprogress'
 import { CacheProvider } from '@emotion/react'
 
 // ** Config Imports
-
-import { defaultACLObj } from 'src/configs/acl'
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Third Party Import
@@ -18,7 +16,6 @@ import { Toaster } from 'react-hot-toast'
 
 // ** Component Imports
 import UserLayout from 'src/layouts/UserLayout'
-import AclGuard from 'src/@core/components/auth/AclGuard'
 import ThemeComponent from 'src/@core/theme/ThemeComponent'
 import AuthGuard from 'src/@core/components/auth/AuthGuard'
 import GuestGuard from 'src/@core/components/auth/GuestGuard'
@@ -65,8 +62,10 @@ if (themeConfig.routingLoader) {
   })
 }
 
-const Guard = ({ children, authGuard }) => {
-  if (!authGuard) {
+const Guard = ({ children, authGuard, guestGuard }) => {
+  if (guestGuard) {
+    return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
+  } else if (!guestGuard && !authGuard) {
     return <>{children}</>
   } else {
     return <AuthGuard fallback={<Spinner />}>{children}</AuthGuard>
@@ -84,6 +83,7 @@ const App = props => {
     Component.getLayout ?? (page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>)
   const setConfig = Component.setConfig ?? undefined
   const authGuard = Component.authGuard ?? true
+  const guestGuard = Component.guestGuard ?? false
 
   return (
     <CacheProvider value={emotionCache}>
@@ -104,7 +104,9 @@ const App = props => {
               return (
                 <ThemeComponent settings={settings}>
                   <WindowWrapper>
-                    <Guard authGuard={authGuard}>{getLayout(<Component {...pageProps} />)}</Guard>
+                    <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                      {getLayout(<Component {...pageProps} />)}
+                    </Guard>
                   </WindowWrapper>
                   <ReactHotToast>
                     <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />

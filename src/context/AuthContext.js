@@ -31,9 +31,14 @@ const AuthProvider = ({ children }) => {
   const router = useRouter()
   useEffect(() => {
     const initAuth = async () => {
+      setLoading(true)
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+      const userDataCheck = window.localStorage.getItem('userData')
+      console.log(userDataCheck)
       if (storedToken) {
         setLoading(true)
+        setUser(userDataCheck)
+        setLoading(false)
       } else {
         setLoading(false)
       }
