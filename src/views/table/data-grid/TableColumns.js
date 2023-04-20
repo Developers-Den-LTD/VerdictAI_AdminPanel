@@ -12,9 +12,7 @@ import CardHeader from '@mui/material/CardHeader'
 import { DataGrid } from '@mui/x-data-grid'
 
 // ** MUI Imports
-import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import IconButton from '@mui/material/IconButton'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -115,7 +113,7 @@ const TableColumns = props => {
         title='All Admins'
         action={
           <div>
-            <Button size='small' variant='contained' onClick={() => setHideNameColumn(!hideNameColumn)}>
+            <Button size='small' variant='contained' Link='/dashboard/add-new-admin'>
               Add New Admin
             </Button>
           </div>

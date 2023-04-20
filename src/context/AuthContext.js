@@ -9,6 +9,7 @@ import axios from 'axios'
 
 // ** Config
 import authConfig from 'src/configs/auth'
+import moment from 'moment/moment'
 
 // ** Defaults
 const defaultProvider = {
@@ -33,12 +34,18 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       setLoading(true)
-      const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+      const storedToken1 = window.localStorage.getItem(authConfig.storageTokenKeyName)
+      const storedToken2 = JSON.parse(storedToken1)
       const userDataCheck = window.localStorage.getItem('userData')
       console.log(userDataCheck)
-      if (storedToken) {
+      if (storedToken2) {
         setLoading(true)
-        setUser(JSON.parse(userDataCheck))
+        if (isLoggedIn()) {
+          setUser(JSON.parse(userDataCheck))
+        } else {
+          console.log('Logout due to token expiry!')
+          handleLogout()
+        }
         setLoading(false)
       } else {
         setLoading(false)
@@ -63,8 +70,13 @@ const AuthProvider = ({ children }) => {
           name: res.adminName,
           role: res.isSuperAdmin ? 'superadmin' : 'admin'
         }
+
+        const tokenData = {
+          token: response.data.response.accesstoken.token,
+          expiry: response.data.response.accesstoken.expiry
+        }
         params.rememberMe
-          ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.response.accesstoken.token)
+          ? window.localStorage.setItem(authConfig.storageTokenKeyName, JSON.stringify(tokenData))
           : null
         const returnUrl = router.query.returnUrl
         setUser(userData)
@@ -99,9 +111,32 @@ const AuthProvider = ({ children }) => {
   }
 
   const getAuthToken = () => {
-    return window.localStorage.getItem(authConfig.storageTokenKeyName)
+    const tokenData = window.localStorage.getItem(authConfig.storageTokenKeyName)
       ? window.localStorage.getItem(authConfig.storageTokenKeyName)
       : null
+    const tokenParse = JSON.parse(tokenData)
+
+    return tokenData ? tokenParse.token : null
+  }
+
+  function isLoggedIn() {
+    return moment().isBefore(getExpirationAccessToken())
+  }
+
+  function isLoggedOut() {
+    return !this.isLoggedIn()
+  }
+
+  function getExpirationAccessToken() {
+    const expiration1 = localStorage.getItem(authConfig.storageTokenKeyName)
+    const expiration = JSON.parse(expiration1)
+    if (expiration1) {
+      const expiresAt = expiration.expiry || '{}'
+
+      return moment(expiresAt)
+    } else {
+      return null
+    }
   }
 
   const values = {

@@ -36,7 +36,7 @@ const DataGrid = () => {
       <PageHeader
         title={
           <Typography variant='h5'>
-            <MuiLink target='_blank'>Admins</MuiLink>
+            <MuiLink>Admins</MuiLink>
           </Typography>
         }
         subtitle={
