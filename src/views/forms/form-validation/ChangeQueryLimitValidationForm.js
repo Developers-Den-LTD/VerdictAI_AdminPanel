@@ -23,11 +23,11 @@ import { ChangeQueryLimit } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 
 const schema = yup.object().shape({
-  noOfQuries: yup.number().max(50).required()
+  noOfQuries: yup.number().min(1).max(50).required()
 })
 
 const defaultValues = {
-  noOfQuries: null
+  noOfQuries: 1
 }
 
 const ChangeQueryLimitValidationForm = props => {
@@ -49,13 +49,13 @@ const ChangeQueryLimitValidationForm = props => {
     console.log(noOfQuries)
     ChangeQueryLimit(props.selectedQueryForEdit.id, noOfQuries, getAuthToken()).then(res => {
       if (!res.error) {
-        toast.success(`Successfully changed query limit of id: ${props.selectedQueryForEdit}`, {
+        toast.success(`Successfully changed query limit of id: ${props.selectedQueryForEdit.id}`, {
           position: 'bottom-right'
         })
         resetField('noOfQuries')
         props.setSelectedQueryForEdit(null)
       } else {
-        toast.error(`Failed while changing query limit of id: ${props.selectedQueryForEdit}`, {
+        toast.error(`Failed while changing query limit of id: ${props.selectedQueryForEdit.id}`, {
           position: 'bottom-right'
         })
         resetField('noOfQuries')
@@ -93,6 +93,7 @@ const ChangeQueryLimitValidationForm = props => {
                       ? 'No of quries should be number and is required field'
                       : ''}
                     {errors.noOfQuries.type === 'max' ? 'No of queries should be less then or equal to 50' : ''}
+                    {errors.noOfQuries.type === 'min' ? 'No of queries should be greater then or equal to 1' : ''}
                   </FormHelperText>
                 )}
               </FormControl>

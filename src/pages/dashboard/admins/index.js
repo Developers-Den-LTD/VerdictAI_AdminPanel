@@ -30,10 +30,6 @@ const DataGrid = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    console.log(allAdmins)
-  }, [allAdmins])
-
   return (
     <Grid container spacing={6}>
       <PageHeader

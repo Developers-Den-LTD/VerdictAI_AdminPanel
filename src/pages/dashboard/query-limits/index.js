@@ -24,7 +24,6 @@ const QueryLimits = () => {
 
   useEffect(() => {
     if (!selectedQueryForEdit) {
-      console.log('Hello wrold')
       getAllQueryLimits(getAuthToken()).then(res => {
         if (!res.error) {
           setAllQueryLimits(res.data)
@@ -33,10 +32,6 @@ const QueryLimits = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedQueryForEdit])
-
-  useEffect(() => {
-    console.log(allQueryLimits)
-  }, [allQueryLimits])
 
   return (
     <DatePickerWrapper>
@@ -47,7 +42,7 @@ const QueryLimits = () => {
               <MuiLink>Query Limits</MuiLink>
             </Typography>
           }
-          subtitle={<Typography variant='body2'>Change Query Limits</Typography>}
+          subtitle={<Typography variant='body2'>Change query limits for a certain id</Typography>}
         />
         <Grid item xs={12}>
           <QueryLimitsTableColumns
