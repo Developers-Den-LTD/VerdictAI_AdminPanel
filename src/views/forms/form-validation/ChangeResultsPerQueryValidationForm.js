@@ -15,6 +15,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import TextField from '@mui/material/TextField'
 
 // ** Third Party Imports
 import toast from 'react-hot-toast'
@@ -25,20 +26,22 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { changeBrowser, createAdmin, getAllBrowsers } from 'Client/request'
+import { ChangeResultsPerQuery, changeBrowser, createAdmin, getAllBrowsers, getAllUserTypes } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 
 const schema = yup.object().shape({
-  browser: yup.string().required()
+  userType: yup.string().required(),
+  results: yup.number().min(5).max(15).required()
 })
 
 const defaultValues = {
-  browser: ''
+  userType: '',
+  results: 5
 }
 
-const ChangeBrowsersValidationForm = () => {
+const ChangeResultsPerQueryValidationForm = () => {
   //** get all browsers */
-  const [allBrowsers, setAllBrowsers] = useState([])
+  const [allUserTypes, setAllUserTypes] = useState([])
 
   //** Get token from auth */
   const { getAuthToken } = useAuth()
@@ -54,34 +57,35 @@ const ChangeBrowsersValidationForm = () => {
 
   //** If there are no validation errors, call the create admin api */
   const onSubmit = data => {
-    const { browser } = data
-    console.log(browser)
-    changeBrowser(browser, getAuthToken()).then(res => {
-      let browserObj = allBrowsers.find(o => o.browserId == browser)
+    const { userType, results } = data
+    ChangeResultsPerQuery(userType, results, getAuthToken()).then(res => {
+      let userTypeObj = allUserTypes.find(o => o.userTypeId == userType)
       if (!res.error) {
-        toast.success(`Successfully Changed browser for unregistered users to: ${browserObj.browserName}`, {
+        toast.success(`Successfully changed number of result for user type: ${userTypeObj.userTypeName}`, {
           position: 'bottom-right'
         })
-        resetField('browser')
+        resetField('userType')
+        resetField('results')
       } else {
-        toast.error(`Failed while Changing browser for unregistered users to: ${browserObj.browserName}`, {
+        toast.error(`Failed while changing number of result for user type: ${userTypeObj.userTypeName}`, {
           position: 'bottom-right'
         })
-        resetField('browser')
+        resetField('userType')
+        resetField('results')
       }
     })
   }
 
   useEffect(() => {
-    getAllBrowsers(getAuthToken()).then(res => {
-      setAllBrowsers(res.data)
+    getAllUserTypes(getAuthToken()).then(res => {
+      setAllUserTypes(res.data)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <Card>
-      <CardHeader title='Browsers' />
+      <CardHeader title='Result per query' />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={5}>
@@ -89,37 +93,67 @@ const ChangeBrowsersValidationForm = () => {
               <FormControl fullWidth>
                 <InputLabel
                   id='validation-basic-select'
-                  error={Boolean(errors.browser)}
+                  error={Boolean(errors.userType)}
                   htmlFor='validation-basic-select'
                 >
-                  Browsers
+                  User Types
                 </InputLabel>
                 <Controller
-                  name='browser'
+                  name='userType'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <Select
                       value={value}
-                      label='Browsers'
+                      label='User Type'
                       onChange={onChange}
-                      error={Boolean(errors.browser)}
+                      error={Boolean(errors.userType)}
                       labelId='validation-basic-select'
                       aria-describedby='validation-basic-select'
                     >
-                      {allBrowsers.map(item => {
+                      {allUserTypes.map(item => {
                         return (
-                          <MenuItem value={item.browserId} key={item.browserId}>
-                            {item.browserName}
+                          <MenuItem value={item.userTypeId} key={item.userTypeId}>
+                            {item.userTypeName}
                           </MenuItem>
                         )
                       })}
                     </Select>
                   )}
                 />
-                {errors.browser && (
+                {errors.userType && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-select'>
                     This field is required
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <Controller
+                  name='results'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <TextField
+                      value={value}
+                      label='No of Results'
+                      onChange={onChange}
+                      placeholder='Enter number of results'
+                      type='text'
+                      error={Boolean(errors.results)}
+                      aria-describedby='validation-basic-first-name'
+                    />
+                  )}
+                />
+                {errors.results && (
+                  <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-first-name'>
+                    {errors.results.type === 'typeError'
+                      ? 'No of results should be a number and is a required field'
+                      : 'This field is required'}
+                    {errors.results.type === 'max' ? 'No of results should be less then or equal to 15' : ''}
+                    {errors.results.type === 'min' ? 'No of results should be greater then or equal to 5' : ''}
                   </FormHelperText>
                 )}
               </FormControl>
@@ -141,4 +175,4 @@ const ChangeBrowsersValidationForm = () => {
   )
 }
 
-export default ChangeBrowsersValidationForm
+export default ChangeResultsPerQueryValidationForm

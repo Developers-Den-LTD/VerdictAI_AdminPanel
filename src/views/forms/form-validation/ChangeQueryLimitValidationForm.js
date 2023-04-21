@@ -89,8 +89,10 @@ const ChangeQueryLimitValidationForm = props => {
                 />
                 {errors.noOfQuries && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-first-name'>
-                    {errors.noOfQuries.type === 'typeError' ? 'No of quries should be number and is requied field' : ''}
-                    {errors.noOfQuries.type === 'max' ? 'No of queries should be less then 50' : ''}
+                    {errors.noOfQuries.type === 'typeError'
+                      ? 'No of quries should be number and is required field'
+                      : ''}
+                    {errors.noOfQuries.type === 'max' ? 'No of queries should be less then or equal to 50' : ''}
                   </FormHelperText>
                 )}
               </FormControl>

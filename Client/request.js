@@ -169,3 +169,59 @@ export async function ChangeQueryLimit(id, noOfQueries, token) {
       return { error: 'Some error occured!:' + error }
     })
 }
+
+//async function which gets all the user types
+export async function getAllUserTypes(token) {
+  var config = {
+    method: 'get',
+    url: API_URL + 'user-types',
+    headers: {
+      'x-access-token': token
+    }
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return { data: response.data.response }
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
+
+//change result per query for a certain user type
+export async function ChangeResultsPerQuery(userType, noOfResults, token) {
+  var data = {
+    no_of_results_per_query: noOfResults,
+    user_type: userType
+  }
+
+  var config = {
+    method: 'post',
+    url: API_URL + 'set-results-per-query',
+    headers: {
+      'x-access-token': token
+    },
+    data: data
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return true
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}

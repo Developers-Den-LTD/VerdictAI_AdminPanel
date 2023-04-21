@@ -24,6 +24,11 @@ const navigation = () => [
     title: 'Query Limits',
     icon: 'tabler:adjustments-horizontal',
     path: '/dashboard/query-limits'
+  },
+  {
+    title: 'Results Per Query',
+    icon: 'tabler:report-analytics',
+    path: '/dashboard/results-per-query'
   }
 ]
 
