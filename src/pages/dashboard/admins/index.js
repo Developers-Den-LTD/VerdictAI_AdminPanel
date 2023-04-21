@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography'
 import PageHeader from 'src/@core/components/page-header'
 
 // ** Demo Components Imports
-import TableColumns from 'src/views/table/data-grid/TableColumns'
+import TableColumns from 'src/views/table/data-grid/AllAdminsTableColumns'
 import { getAllAdmins } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 

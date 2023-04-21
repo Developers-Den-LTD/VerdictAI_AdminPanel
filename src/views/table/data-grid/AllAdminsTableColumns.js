@@ -98,7 +98,7 @@ const TableColumns = props => {
         title='All Admins'
         action={
           <div>
-            <Link href='/dashboard/add-new-admin'>
+            <Link href='/dashboard/admins/add-new-admin'>
               <Button size='small' variant='contained'>
                 Add New Admin
               </Button>

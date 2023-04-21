@@ -11,10 +11,15 @@ const navigation = () => {
         },
         {
           title: 'Add New Admin',
-          path: '/dashboard/add-new-admin',
+          path: '/dashboard/admins/add-new-admin',
           icon: 'tabler:user'
         }
       ]
+    },
+    {
+      title: 'Browsers',
+      icon: 'tabler:home',
+      path: '/dashboard/change-browsers'
     }
   ]
 }
