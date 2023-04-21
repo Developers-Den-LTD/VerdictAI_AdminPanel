@@ -18,8 +18,13 @@ const navigation = () => {
     },
     {
       title: 'Browsers',
-      icon: 'tabler:home',
+      icon: 'tabler:browser',
       path: '/dashboard/change-browsers'
+    },
+    {
+      title: 'Query Limits',
+      icon: 'tabler:adjustments-horizontal',
+      path: '/dashboard/query-limits'
     }
   ]
 }

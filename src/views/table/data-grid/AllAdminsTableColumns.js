@@ -111,7 +111,7 @@ const TableColumns = props => {
         rows={props.row || []}
         columns={columns}
         disableSelectionOnClick
-        getRowId={row => ({ id: row.userName })}
+        getRowId={row => row.adminUserName}
       />
     </Card>
   )

@@ -113,3 +113,59 @@ export async function changeBrowser(id, token) {
       return { error: 'Some error occured!:' + error }
     })
 }
+
+//async function which get all the Query Limits
+export async function getAllQueryLimits(token) {
+  var config = {
+    method: 'get',
+    url: API_URL + 'query-limits',
+    headers: {
+      'x-access-token': token
+    }
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return { data: response.data.response }
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
+
+//change query limit for a certain id
+export async function ChangeQueryLimit(id, noOfQueries, token) {
+  var data = {
+    limit_id: id,
+    no_of_queries: noOfQueries
+  }
+
+  var config = {
+    method: 'post',
+    url: API_URL + 'set-query-limit',
+    headers: {
+      'x-access-token': token
+    },
+    data: data
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return true
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
