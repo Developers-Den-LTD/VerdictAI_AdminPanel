@@ -65,7 +65,7 @@ const CreateAdminValidationForm = () => {
   //** If there are no validation errors, call the create admin api */
   const onSubmit = data => {
     const { userName, password, name } = data
-    createAdmin(userName, password, name, getAuthToken()).then(res => {
+    createAdmin(userName, name, password, getAuthToken()).then(res => {
       if (!res.error) {
         toast.success(`Admin added with user name: ${userName}`, {
           position: 'bottom-right'
