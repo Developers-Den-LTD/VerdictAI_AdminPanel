@@ -20,6 +20,7 @@ import { useAuth } from 'src/hooks/useAuth'
 const DataGrid = () => {
   const [allAdmins, setAllAdmins] = useState(null)
   const { getAuthToken } = useAuth()
+  const [IsNewAdmin, setIsNewAdmin] = useState(false)
 
   useEffect(() => {
     getAllAdmins(getAuthToken()).then(res => {
@@ -29,6 +30,17 @@ const DataGrid = () => {
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  useEffect(() => {
+    if (IsNewAdmin) {
+      getAllAdmins(getAuthToken()).then(res => {
+        if (!res.error) {
+          setAllAdmins(res.data)
+        }
+      })
+      setIsNewAdmin(false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [IsNewAdmin])
 
   return (
     <Grid container spacing={6}>
@@ -46,7 +58,7 @@ const DataGrid = () => {
         }
       />
       <Grid item xs={12}>
-        <TableColumns row={allAdmins} />
+        <TableColumns row={allAdmins} newAdmin={setIsNewAdmin} />
       </Grid>
     </Grid>
   )

@@ -225,3 +225,33 @@ export async function ChangeResultsPerQuery(userType, noOfResults, token) {
       return { error: 'Some error occured!:' + error }
     })
 }
+
+export async function DeleteAdmin(token, id) {
+  var data = {
+    username: id
+  }
+
+  var config = {
+    method: 'post',
+    url: API_URL + 'delete-admin',
+    headers: {
+      'x-access-token': token
+    },
+    data: data
+  }
+
+  return axios(config)
+    .then(response => {
+      console.log(response)
+      if (response.data.responseCode == 2000) {
+        return true
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
