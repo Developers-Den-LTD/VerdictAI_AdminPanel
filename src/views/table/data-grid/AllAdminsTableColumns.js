@@ -22,6 +22,9 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
+import { DeleteAdmin } from 'Client/request'
+import { useAuth } from 'src/hooks/useAuth'
+import toast from 'react-hot-toast'
 
 // ** renders client column
 const renderClient = params => {
@@ -40,11 +43,27 @@ const renderClient = params => {
   }
 }
 
-const RowOptions = ({ id }) => {
+const RowOptions = ({ id, newAdmin }) => {
   // ** State
+  const { getAuthToken } = useAuth()
 
   const handleDelete = () => {
     // dispatch(deleteUser(id))
+    // console.log(id, prop)
+    // const updatedRows = prop.row.filter(row => row.adminUserName != id)
+    // console.log('new ', updatedRows)
+    DeleteAdmin(getAuthToken(), id).then(res => {
+      if (!res.error) {
+        newAdmin(true)
+        toast.success(`Successfully Deleted admin ${id}`, {
+          position: 'bottom-right'
+        })
+      } else {
+        toast.error(`Error Deleting admin ${id}`, {
+          position: 'bottom-right'
+        })
+      }
+    })
   }
 
   return (
@@ -88,7 +107,7 @@ const TableColumns = props => {
       minWidth: 140,
       field: 'actions',
       headerName: 'Actions',
-      renderCell: params => <RowOptions id={params.row.adminName} />
+      renderCell: params => <RowOptions id={params.row.adminUserName} newAdmin={props.newAdmin} />
     }
   ]
 
