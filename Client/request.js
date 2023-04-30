@@ -255,3 +255,57 @@ export async function DeleteAdmin(token, id) {
       return { error: 'Some error occured!:' + error }
     })
 }
+
+//async function which get all the abusers
+export async function getAllAbusers(token) {
+  var config = {
+    method: 'get',
+    url: API_URL + 'abusers',
+    headers: {
+      'x-access-token': token
+    }
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return { data: response.data.response }
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
+
+export async function Block_unblock(token, id) {
+  var data = {
+    username: id
+  }
+
+  var config = {
+    method: 'post',
+    url: API_URL + 'block-unblock-user',
+    headers: {
+      'x-access-token': token
+    },
+    data: data
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return response.data
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}

@@ -30,6 +30,11 @@ const navigation = () => {
       title: 'Results Per Query',
       icon: 'tabler:report-analytics',
       path: '/dashboard/results-per-query'
+    },
+    {
+      title: 'Abusers',
+      icon: 'tabler:device-desktop-off',
+      path: '/dashboard/abusers'
     }
   ]
 }
