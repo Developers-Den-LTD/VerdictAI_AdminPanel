@@ -23,6 +23,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 import { DeleteAdmin } from 'Client/request'
+import { admin_signin } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 import toast from 'react-hot-toast'
 
@@ -79,8 +80,33 @@ const RowOptions = ({ id, newAdmin }) => {
 const TableColumns = props => {
   // ** States
   const [hideNameColumn, setHideNameColumn] = useState(false)
+  const { user } = useAuth()
 
   const columns = [
+    {
+      flex: 0.175,
+      minWidth: 120,
+      headerName: 'userName',
+      field: 'userName',
+      renderCell: params => (
+        <Typography variant='body2' sx={{ color: 'text.primary' }}>
+          {params.row.adminUserName}
+        </Typography>
+      )
+    },
+    {
+      flex: 0.15,
+      minWidth: 110,
+      field: 'Name',
+      renderCell: params => (
+        <Typography variant='body2' sx={{ color: 'text.primary' }}>
+          {params.row.adminName}
+        </Typography>
+      )
+    }
+  ]
+
+  const super_columns = [
     {
       flex: 0.175,
       minWidth: 120,
@@ -128,7 +154,7 @@ const TableColumns = props => {
       <DataGrid
         autoHeight
         rows={props.row || []}
-        columns={columns}
+        columns={user.role === 'superadmin' ? super_columns : columns}
         disableSelectionOnClick
         getRowId={row => row.adminUserName}
       />

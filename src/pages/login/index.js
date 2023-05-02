@@ -88,14 +88,12 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 
 const schema = yup.object().shape({
   userName: yup.string().min(5).required(),
-  password: yup.string().min(5).required(),
-  loginAs: yup.string().required()
+  password: yup.string().min(5).required()
 })
 
 const defaultValues = {
   password: 'sAdmin@VerdictAi',
-  userName: 'superadmin',
-  loginAs: 'superAdmin'
+  userName: 'superadmin'
 }
 
 const LoginPage = () => {
@@ -123,8 +121,8 @@ const LoginPage = () => {
   })
 
   const onSubmit = data => {
-    const { userName, password, loginAs } = data
-    auth.login({ userName, password, loginAs }, () => {
+    const { userName, password } = data
+    auth.login({ userName, password }, () => {
       setError('credentials', {
         type: 'manual',
         message: 'Username, Password or type selection is invalid'

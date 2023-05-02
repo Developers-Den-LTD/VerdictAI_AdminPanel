@@ -47,6 +47,8 @@ export async function createAdmin(userName, name, password, token) {
   return axios(config)
     .then(response => {
       if (response.data.responseCode == 2000) {
+        console.log('in client', response)
+
         return true
       } else {
         return { error: 'Some error occured!:' + response.data.responseCode }
@@ -289,6 +291,36 @@ export async function Block_unblock(token, id) {
   var config = {
     method: 'post',
     url: API_URL + 'block-unblock-user',
+    headers: {
+      'x-access-token': token
+    },
+    data: data
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return response.data
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
+
+export async function admin_signin(name, pass) {
+  var data = {
+    username: name,
+    password: pass
+  }
+
+  var config = {
+    method: 'post',
+    url: API_URL + 'login',
     headers: {
       'x-access-token': token
     },

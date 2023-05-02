@@ -57,53 +57,9 @@ const AuthProvider = ({ children }) => {
   // ** Call the following function when and check which type
   // ** Of user is trying to login
   const handleLogin = (params, errorCallback) => {
-    if (params.loginAs == 'superAdmin') {
-      handleSuperAdminLogin(params, errorCallback)
-    } else if (params.loginAs == 'admin') {
-      handleAdminLogin(params, errorCallback)
-    }
-  }
-
-  //handle super-admin login
-  function handleSuperAdminLogin(params, errorCallback) {
-    axios
-      .post(authConfig.superAdminLoginEndpoint, { username: params.userName, password: params.password })
-      .then(async response => {
-        console.log(response)
-        if (response.data.responseCode != 2000) {
-          return errorCallback('userName')
-        }
-        const res = response.data.response
-
-        const userData = {
-          userName: res.adminUsername,
-          name: res.adminName,
-          role: res.isSuperAdmin ? 'superadmin' : 'admin'
-        }
-
-        const tokenData = {
-          token: response.data.response.accesstoken.token,
-          expiry: response.data.response.accesstoken.expiry
-        }
-        window.localStorage.setItem(authConfig.storageTokenKeyName, JSON.stringify(tokenData))
-        window.localStorage.setItem('userData', JSON.stringify(userData))
-        const returnUrl = router.query.returnUrl
-        setUser(userData)
-        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
-        router.replace(redirectURL)
-      })
-      .catch(err => {
-        console.log(err)
-        if (errorCallback) errorCallback(err)
-      })
-  }
-
-  //handle admin login
-  function handleAdminLogin(params, errorCallback) {
     axios
       .post(authConfig.adminLoginEndpoint, { username: params.userName, password: params.password })
       .then(async response => {
-        console.log(response)
         if (response.data.responseCode != 2000) {
           return errorCallback('userName')
         }
