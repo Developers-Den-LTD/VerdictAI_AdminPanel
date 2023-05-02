@@ -258,37 +258,6 @@ const LoginPage = () => {
                   </FormHelperText>
                 )}
               </FormControl>
-              <Grid item xs={12}>
-                <FormControl error={Boolean(errors.radio)}>
-                  <FormLabel>Login As: </FormLabel>
-                  <Controller
-                    name='loginAs'
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <RadioGroup row {...field} aria-label='loginAs' name='validation-basic-radio'>
-                        <FormControlLabel
-                          value='superAdmin'
-                          label='Super-admin'
-                          sx={errors.radio ? { color: 'error.main' } : null}
-                          control={<Radio sx={errors.loginAs ? { color: 'error.main' } : null} />}
-                        />
-                        <FormControlLabel
-                          value='admin'
-                          label='Admin'
-                          sx={errors.radio ? { color: 'error.main' } : null}
-                          control={<Radio sx={errors.loginAs ? { color: 'error.main' } : null} />}
-                        />
-                      </RadioGroup>
-                    )}
-                  />
-                  {errors.loginAs && (
-                    <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-radio'>
-                      This field is required
-                    </FormHelperText>
-                  )}
-                </FormControl>
-              </Grid>
               {errors.credentials && (
                 <FormHelperText sx={{ color: 'error.main', fontSize: 14, marginBottom: 2 }} id=''>
                   {errors.credentials.message}
