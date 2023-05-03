@@ -30,6 +30,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Export
+        run: npm run export
+
       - name: Deploy to main bucket main
         run: aws s3 sync ./out s3://verdict-adminpanel
 
