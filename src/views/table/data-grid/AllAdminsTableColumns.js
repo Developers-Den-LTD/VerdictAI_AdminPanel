@@ -5,6 +5,11 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 // ** MUI Imports
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
@@ -47,12 +52,17 @@ const renderClient = params => {
 const RowOptions = ({ id, newAdmin }) => {
   // ** State
   const { getAuthToken } = useAuth()
+  const [open, setOpen] = useState(false)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   const handleDelete = () => {
-    // dispatch(deleteUser(id))
-    // console.log(id, prop)
-    // const updatedRows = prop.row.filter(row => row.adminUserName != id)
-    // console.log('new ', updatedRows)
     DeleteAdmin(getAuthToken(), id).then(res => {
       if (!res.error) {
         newAdmin(true)
@@ -69,10 +79,29 @@ const RowOptions = ({ id, newAdmin }) => {
 
   return (
     <>
-      <MenuItem onClick={handleDelete} sx={{ '& svg': { mr: 2 } }}>
+      <MenuItem onClick={handleClickOpen} sx={{ '& svg': { mr: 2 } }}>
         <Icon icon='tabler:trash' fontSize={20} />
         Delete
       </MenuItem>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{'Confirm Deletion'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Are you sure you want to delete this admin?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleDelete} autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }
