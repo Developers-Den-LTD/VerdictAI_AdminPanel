@@ -17,14 +17,15 @@ import MenuItem from '@mui/material/MenuItem'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-const QueryLimitsTableColumns = props => {
+const ResultsPerQueryTableColumns = props => {
   // ** States
 
-  const RowOptions = ({ id, value }) => {
+  const RowOptions = ({ id, type, results }) => {
     const handleEdit = () => {
       props.setSelectedQueryForEdit({
         id,
-        value
+        type,
+        results
       })
     }
 
@@ -45,27 +46,27 @@ const QueryLimitsTableColumns = props => {
       field: 'Id',
       renderCell: params => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {params.row.limitId}
+          {params.row.userTypeId}
         </Typography>
       )
     },
     {
       flex: 0.15,
       minWidth: 110,
-      field: 'Time In String',
+      field: 'Type of User',
       renderCell: params => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {params.row.timeInString}
+          {params.row.userType}
         </Typography>
       )
     },
     {
       flex: 0.15,
       minWidth: 110,
-      field: 'No of Queries',
+      field: 'No of Results',
       renderCell: params => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {params.row.noOfQueries}
+          {params.row.noOfResults}
         </Typography>
       )
     },
@@ -74,7 +75,9 @@ const QueryLimitsTableColumns = props => {
       minWidth: 140,
       field: 'actions',
       headerName: 'Actions',
-      renderCell: params => <RowOptions id={params.row.limitId} value={params.row.noOfQueries} />
+      renderCell: params => (
+        <RowOptions id={params.row.userTypeId} type={params.row.userType} results={params.row.noOfResults} />
+      )
     }
   ]
 
@@ -86,10 +89,10 @@ const QueryLimitsTableColumns = props => {
         rows={props.row || []}
         columns={columns}
         disableSelectionOnClick
-        getRowId={row => row.limitId}
+        getRowId={row => row.userTypeId}
       />
     </Card>
   )
 }
 
-export default QueryLimitsTableColumns
+export default ResultsPerQueryTableColumns

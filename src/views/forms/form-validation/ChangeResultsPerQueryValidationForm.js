@@ -30,18 +30,18 @@ import { ChangeResultsPerQuery, changeBrowser, createAdmin, getAllBrowsers, getA
 import { useAuth } from 'src/hooks/useAuth'
 
 const schema = yup.object().shape({
-  userType: yup.string().required(),
   results: yup.number().min(5).max(15).required()
 })
 
 const defaultValues = {
-  userType: '',
   results: 5
 }
 
-const ChangeResultsPerQueryValidationForm = () => {
+const ChangeResultsPerQueryValidationForm = props => {
   //** get all browsers */
   const [allUserTypes, setAllUserTypes] = useState([])
+  const [title, setTitle] = useState()
+  const [EditUserType, setEditUserType] = useState(props.selectedQueryForEdit.type)
 
   //** Get token from auth */
   const { getAuthToken } = useAuth()
@@ -57,21 +57,20 @@ const ChangeResultsPerQueryValidationForm = () => {
 
   //** If there are no validation errors, call the create admin api */
   const onSubmit = data => {
-    const { userType, results } = data
-    ChangeResultsPerQuery(userType, results, getAuthToken()).then(res => {
-      let userTypeObj = allUserTypes.find(o => o.userTypeId == userType)
+    const { results } = data
+    ChangeResultsPerQuery(props.selectedQueryForEdit.id, results, getAuthToken()).then(res => {
       if (!res.error) {
-        toast.success(`Successfully changed number of result for user type: ${userTypeObj.userTypeName}`, {
+        toast.success(`Successfully changed number of result for user type: ${EditUserType}`, {
           position: 'bottom-right'
         })
-        resetField('userType')
         resetField('results')
+        props.setSelectedQueryForEdit(null)
       } else {
-        toast.error(`Failed while changing number of result for user type: ${userTypeObj.userTypeName}`, {
+        toast.error(`Failed while changing number of result for user type: ${EditUserType}`, {
           position: 'bottom-right'
         })
-        resetField('userType')
         resetField('results')
+        props.setSelectedQueryForEdit(null)
       }
     })
   }
@@ -80,55 +79,16 @@ const ChangeResultsPerQueryValidationForm = () => {
     getAllUserTypes(getAuthToken()).then(res => {
       setAllUserTypes(res.data)
     })
+    setTitle('Results per query (' + props.selectedQueryForEdit.type + ')')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <Card>
-      <CardHeader title='Result per query' />
+      <CardHeader title={title} />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={5}>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel
-                  id='validation-basic-select'
-                  error={Boolean(errors.userType)}
-                  htmlFor='validation-basic-select'
-                >
-                  User Types
-                </InputLabel>
-                <Controller
-                  name='userType'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <Select
-                      value={value}
-                      label='User Type'
-                      onChange={onChange}
-                      error={Boolean(errors.userType)}
-                      labelId='validation-basic-select'
-                      aria-describedby='validation-basic-select'
-                    >
-                      {allUserTypes.map(item => {
-                        return (
-                          <MenuItem value={item.userTypeId} key={item.userTypeId}>
-                            {item.userTypeName}
-                          </MenuItem>
-                        )
-                      })}
-                    </Select>
-                  )}
-                />
-                {errors.userType && (
-                  <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-select'>
-                    This field is required
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <Controller
@@ -164,6 +124,15 @@ const ChangeResultsPerQueryValidationForm = () => {
                   {errors.admin.message}
                 </FormHelperText>
               )}
+              <Button
+                size='large'
+                type='button'
+                variant='outlined'
+                style={{ marginRight: 10 }}
+                onClick={() => props.setSelectedQueryForEdit(null)}
+              >
+                Cancel
+              </Button>
               <Button size='large' type='submit' variant='contained'>
                 Submit
               </Button>

@@ -197,6 +197,31 @@ export async function getAllUserTypes(token) {
     })
 }
 
+//async function which gets all the user types
+export async function getResultsPerQuery(token) {
+  var config = {
+    method: 'get',
+    url: API_URL + 'results-per-query',
+    headers: {
+      'x-access-token': token
+    }
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return { data: response.data.response }
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
+
 //change result per query for a certain user type
 export async function ChangeResultsPerQuery(userType, noOfResults, token) {
   var data = {
@@ -291,36 +316,6 @@ export async function Block_unblock(token, id) {
   var config = {
     method: 'post',
     url: API_URL + 'block-unblock-user',
-    headers: {
-      'x-access-token': token
-    },
-    data: data
-  }
-
-  return axios(config)
-    .then(response => {
-      if (response.data.responseCode == 2000) {
-        return response.data
-      } else {
-        return { error: 'Some error occured!:' + response.data.responseCode }
-      }
-    })
-    .catch(error => {
-      console.log(error)
-
-      return { error: 'Some error occured!:' + error }
-    })
-}
-
-export async function admin_signin(name, pass) {
-  var data = {
-    username: name,
-    password: pass
-  }
-
-  var config = {
-    method: 'post',
-    url: API_URL + 'login',
     headers: {
       'x-access-token': token
     },
