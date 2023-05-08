@@ -12,7 +12,7 @@ const defineRulesFor = (role, subject) => {
   if (role === 'superadmin') {
     can('manage', 'all')
   } else if (role === 'admin') {
-    can(['read'], 'all')
+    can(['manage'], 'all')
   }
 
   return rules

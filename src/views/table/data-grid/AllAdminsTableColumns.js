@@ -31,6 +31,7 @@ import { DeleteAdmin } from 'Client/request'
 import { admin_signin } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 import toast from 'react-hot-toast'
+import { useRouter } from 'next/router'
 
 // ** renders client column
 const renderClient = params => {
@@ -53,6 +54,7 @@ const RowOptions = ({ id, newAdmin }) => {
   // ** State
   const { getAuthToken } = useAuth()
   const [open, setOpen] = useState(false)
+  const router = useRouter()
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -77,8 +79,16 @@ const RowOptions = ({ id, newAdmin }) => {
     })
   }
 
+  function handleChangePassword() {
+    router.push('/dashboard/admins/change-password')
+  }
+
   return (
     <>
+      <MenuItem onClick={() => handleChangePassword()} sx={{ '& svg': { mr: 2 } }}>
+        <Icon icon='tabler:lock' fontSize={20} />
+        Change Password
+      </MenuItem>
       <MenuItem onClick={handleClickOpen} sx={{ '& svg': { mr: 2 } }}>
         <Icon icon='tabler:trash' fontSize={20} />
         Delete
@@ -138,7 +148,7 @@ const TableColumns = props => {
 
   const super_columns = [
     {
-      flex: 0.175,
+      flex: 0.1,
       minWidth: 120,
       headerName: 'userName',
       field: 'userName',
@@ -149,8 +159,8 @@ const TableColumns = props => {
       )
     },
     {
-      flex: 0.15,
-      minWidth: 110,
+      flex: 0.12,
+      minWidth: 90,
       field: 'Name',
       renderCell: params => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
@@ -160,7 +170,7 @@ const TableColumns = props => {
     },
     {
       flex: 0.125,
-      minWidth: 140,
+      minWidth: 200,
       field: 'actions',
       headerName: 'Actions',
       renderCell: params => <RowOptions id={params.row.adminUserName} newAdmin={props.newAdmin} />

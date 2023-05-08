@@ -61,6 +61,38 @@ export async function createAdmin(userName, name, password, token) {
     })
 }
 
+export async function ChangeAdminPassword(token, id, current_password, new_password) {
+  var data = {
+    username: id,
+    current_password: current_password,
+    new_password: new_password
+  }
+
+  var config = {
+    method: 'post',
+    url: API_URL + 'change-password',
+    headers: {
+      'x-access-token': token
+    },
+    data: data
+  }
+
+  return axios(config)
+    .then(response => {
+      console.log(response)
+      if (response.data.responseCode == 2000) {
+        return true
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
+
 //async function which get all the browsers
 export async function getAllBrowsers(token) {
   var config = {
