@@ -389,6 +389,34 @@ export async function GetAllUsers(token) {
     })
 }
 
+//async function which get abuse searches
+export async function GetAllAbuseSearches(token, id) {
+  var config = {
+    method: 'post',
+    url: API_URL + 'abusers',
+    headers: {
+      'x-access-token': token
+    },
+    data: {
+      username: id
+    }
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return { data: response.data.response }
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
+
 export async function Block_unblock(token, id) {
   var data = {
     username: id

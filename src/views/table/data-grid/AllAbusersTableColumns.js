@@ -26,10 +26,12 @@ import { Block_unblock } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 import toast from 'react-hot-toast'
 import moment from 'moment'
+import { useRouter } from 'next/router'
 
 const RowOptions = ({ id }) => {
   // ** State
   const { getAuthToken } = useAuth()
+  const router = useRouter()
 
   const handleBlock = () => {
     Block_unblock(getAuthToken(), id).then(res => {
@@ -45,8 +47,17 @@ const RowOptions = ({ id }) => {
     })
   }
 
+  const handleAbuseSearches = () => {
+    router.push(`/dashboard/users/abuse-searches?userName=${id}`)
+  }
+
   return (
     <>
+      <>
+        <MenuItem onClick={() => handleAbuseSearches()} sx={{ '& svg': { mr: 2 } }}>
+          <Icon icon='tabler:user-search' fontSize={20} />
+        </MenuItem>
+      </>
       <MenuItem onClick={handleBlock} sx={{ '& svg': { mr: 2 } }}>
         <Icon icon='tabler:user-off' fontSize={20} />
         Block\Unblock

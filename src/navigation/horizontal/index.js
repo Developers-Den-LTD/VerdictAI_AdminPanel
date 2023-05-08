@@ -1,8 +1,8 @@
 const navigation = () => [
   {
-    title: 'dashboard',
+    title: 'Dashboard',
     icon: 'tabler:dashboard',
-    path: '/dashboard/'
+    path: '/dashboard/home'
   },
   {
     title: 'Admins',
