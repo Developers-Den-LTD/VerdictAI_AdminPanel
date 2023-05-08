@@ -11,14 +11,14 @@ const FooterContent = () => {
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
       <Typography sx={{ mr: 2 }}>
-        {`© ${new Date().getFullYear()}, Made with `}
-        <Box component='span' sx={{ color: 'error.main' }}>
-          ❤️
-        </Box>
-        {` by `}
+        {`Powered by `}
         <MuiLink target='_blank' href='https://developersdens.com'>
           Developers Den
         </MuiLink>
+      </Typography>
+      <Typography sx={{ mr: 2 }}>
+        {`Copyright ${new Date().getFullYear()},  `}
+        {` All rights reserved `}
       </Typography>
     </Box>
   )
