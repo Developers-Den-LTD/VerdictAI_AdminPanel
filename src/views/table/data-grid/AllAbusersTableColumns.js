@@ -81,7 +81,7 @@ const TableColumns = props => {
     },
 
     {
-      flex: 0.15,
+      flex: 0.1,
       minWidth: 110,
       field: 'Total Abuse Searches',
       renderCell: params => {
@@ -90,6 +90,20 @@ const TableColumns = props => {
         return (
           <Typography variant='body2' sx={{ color: 'text.primary' }}>
             {b ? b.totalAbuseSearches : 'Not known'}
+          </Typography>
+        )
+      }
+    },
+    {
+      flex: 0.1,
+      minWidth: 110,
+      field: 'Status',
+      renderCell: params => {
+        const b = props.allAbusers.find(o => o.userName == params.row.userName)
+
+        return (
+          <Typography variant='body2' sx={{ color: 'text.primary' }}>
+            {params.row.isActive ? 'Active' : 'Blocked'}
           </Typography>
         )
       }

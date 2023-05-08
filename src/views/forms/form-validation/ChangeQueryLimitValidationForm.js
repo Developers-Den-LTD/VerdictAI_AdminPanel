@@ -26,13 +26,19 @@ const schema = yup.object().shape({
   noOfQuries: yup.number().min(1).max(50).required()
 })
 
-const defaultValues = {
-  noOfQuries: 1
-}
-
 const ChangeQueryLimitValidationForm = props => {
   //** Get token from auth */
   const { getAuthToken } = useAuth()
+
+  const [defaultValues, setDefualtValues] = useState({
+    noOfQuries: props.selectedQueryForEdit.value
+  })
+
+  useEffect(() => {
+    setDefualtValues({
+      noOfQuries: props.selectedQueryForEdit.value
+    })
+  }, [props.selectedQueryForEdit])
 
   // ** Hooks
   const {

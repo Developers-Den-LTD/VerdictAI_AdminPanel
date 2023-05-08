@@ -33,10 +33,6 @@ const schema = yup.object().shape({
   results: yup.number().min(5).max(15).required()
 })
 
-const defaultValues = {
-  results: 5
-}
-
 const ChangeResultsPerQueryValidationForm = props => {
   //** get all browsers */
   const [allUserTypes, setAllUserTypes] = useState([])
@@ -45,6 +41,10 @@ const ChangeResultsPerQueryValidationForm = props => {
 
   //** Get token from auth */
   const { getAuthToken } = useAuth()
+
+  const defaultValues = {
+    results: props.selectedQueryForEdit.results
+  }
 
   // ** Hooks
   const {
@@ -79,13 +79,12 @@ const ChangeResultsPerQueryValidationForm = props => {
     getAllUserTypes(getAuthToken()).then(res => {
       setAllUserTypes(res.data)
     })
-    setTitle('Results per query (' + props.selectedQueryForEdit.type + ')')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <Card>
-      <CardHeader title={title} />
+      <CardHeader title={'Results per query (' + props.selectedQueryForEdit.type + ')'} />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={5}>
