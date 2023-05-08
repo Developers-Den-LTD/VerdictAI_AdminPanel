@@ -14,17 +14,24 @@ import PageHeader from 'src/@core/components/page-header'
 
 // ** Demo Components Imports
 import TableColumns from 'src/views/table/data-grid/AllAbusersTableColumns'
-import { getAllAbusers } from 'Client/request'
+import { GetAllUsers, getAllAbusers } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 
 const DataGrid = () => {
   const [allAbusers, setAllAbusers] = useState(null)
+  const [allUsers, setAllUsers] = useState(null)
   const { getAuthToken } = useAuth()
 
   useEffect(() => {
     getAllAbusers(getAuthToken()).then(res => {
       if (!res.error) {
         setAllAbusers(res.data)
+      }
+    })
+    GetAllUsers(getAuthToken()).then(res => {
+      if (!res.error) {
+        console.log(res.data)
+        setAllUsers(res.data)
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,17 +42,17 @@ const DataGrid = () => {
       <PageHeader
         title={
           <Typography variant='h5'>
-            <MuiLink>Abusers</MuiLink>
+            <MuiLink>Users</MuiLink>
           </Typography>
         }
         subtitle={
           <Typography variant='body2'>
-            This page shows all the abusers. You can perform block/Unblock functionality on them
+            This page shows all the Users. You can perform block/Unblock functionality on them
           </Typography>
         }
       />
       <Grid item xs={12}>
-        <TableColumns row={allAbusers} />
+        <TableColumns row={allUsers} allAbusers={allAbusers} />
       </Grid>
     </Grid>
   )

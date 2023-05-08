@@ -22,6 +22,11 @@ const navigation = () => {
       ]
     },
     {
+      title: 'Users',
+      icon: 'tabler:users',
+      path: '/dashboard/users'
+    },
+    {
       title: 'Browsers',
       icon: 'tabler:browser',
       path: '/dashboard/change-browsers'
@@ -35,11 +40,6 @@ const navigation = () => {
       title: 'Results Per Query',
       icon: 'tabler:report-analytics',
       path: '/dashboard/results-per-query'
-    },
-    {
-      title: 'Abusers',
-      icon: 'tabler:device-desktop-off',
-      path: '/dashboard/abusers'
     }
   ]
 }

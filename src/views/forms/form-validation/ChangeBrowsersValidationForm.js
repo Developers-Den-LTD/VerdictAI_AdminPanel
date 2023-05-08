@@ -105,13 +105,19 @@ const ChangeBrowsersValidationForm = () => {
                           if (!value) {
                             if (allBrowsers && defualtBrowser) {
                               const b = allBrowsers.find(o => o.browserId == defualtBrowser.browserId)
-
-                              return b?.browserName
+                              if (b?.browserName == 'Select all') {
+                                return 'All Browsers'
+                              } else {
+                                return b?.browserName
+                              }
                             }
                           } else {
                             const b = allBrowsers.find(o => o.browserId == value)
-
-                            return b?.browserName
+                            if (b?.browserName == 'Select all') {
+                              return 'All Browsers'
+                            } else {
+                              return b?.browserName
+                            }
                           }
                         }}
                         onChange={onChange}
@@ -122,7 +128,7 @@ const ChangeBrowsersValidationForm = () => {
                         {allBrowsers.map(item => {
                           return (
                             <MenuItem value={item.browserId} key={item.browserId}>
-                              {item.browserName}
+                              {item.browserName == 'Select all' ? 'All Browsers' : item.browserName}
                             </MenuItem>
                           )
                         })}
