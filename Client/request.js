@@ -86,6 +86,31 @@ export async function getAllBrowsers(token) {
     })
 }
 
+//async function which get defualt browser of unregistered users
+export async function getDefualtBrowser(token) {
+  var config = {
+    method: 'get',
+    url: API_URL + 'default-browser',
+    headers: {
+      'x-access-token': token
+    }
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        return { data: response.data.response }
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
+
 //change browsers for unregistered users
 export async function changeBrowser(id, token) {
   var data = {

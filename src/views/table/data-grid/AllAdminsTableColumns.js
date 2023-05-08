@@ -109,6 +109,7 @@ const RowOptions = ({ id, newAdmin }) => {
 const TableColumns = props => {
   // ** States
   const [hideNameColumn, setHideNameColumn] = useState(false)
+  const [isDeleteAdmin, setIsDeleteAdmin] = useState(false)
   const { user } = useAuth()
 
   const columns = [
@@ -167,27 +168,29 @@ const TableColumns = props => {
   ]
 
   return (
-    <Card>
-      <CardHeader
-        title='All Admins'
-        action={
-          <div>
-            <Link href='/dashboard/admins/add-new-admin'>
-              <Button size='small' variant='contained'>
-                Add New Admin
-              </Button>
-            </Link>
-          </div>
-        }
-      />
-      <DataGrid
-        autoHeight
-        rows={props.row || []}
-        columns={user.role === 'superadmin' ? super_columns : columns}
-        disableSelectionOnClick
-        getRowId={row => row.adminUserName}
-      />
-    </Card>
+    <>
+      <Card>
+        <CardHeader
+          title='All Admins'
+          action={
+            <div>
+              <Link href='/dashboard/admins/add-new-admin'>
+                <Button size='small' variant='contained'>
+                  Add New Admin
+                </Button>
+              </Link>
+            </div>
+          }
+        />
+        <DataGrid
+          autoHeight
+          rows={props.row || []}
+          columns={user.role === 'superadmin' ? super_columns : columns}
+          disableSelectionOnClick
+          getRowId={row => row.adminUserName}
+        />
+      </Card>
+    </>
   )
 }
 

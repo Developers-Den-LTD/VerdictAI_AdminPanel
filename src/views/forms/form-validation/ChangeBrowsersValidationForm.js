@@ -25,7 +25,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { changeBrowser, createAdmin, getAllBrowsers } from 'Client/request'
+import { changeBrowser, createAdmin, getAllBrowsers, getDefualtBrowser } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 
 const schema = yup.object().shape({
@@ -39,6 +39,7 @@ const defaultValues = {
 const ChangeBrowsersValidationForm = () => {
   //** get all browsers */
   const [allBrowsers, setAllBrowsers] = useState([])
+  const [defualtBrowser, setDefualtBrowser] = useState(null)
 
   //** Get token from auth */
   const { getAuthToken } = useAuth()
@@ -76,6 +77,10 @@ const ChangeBrowsersValidationForm = () => {
     getAllBrowsers(getAuthToken()).then(res => {
       setAllBrowsers(res.data)
     })
+    getDefualtBrowser(getAuthToken()).then(res => {
+      setDefualtBrowser(res.data)
+      console.log(res.data)
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -87,34 +92,42 @@ const ChangeBrowsersValidationForm = () => {
           <Grid container spacing={5}>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
-                <InputLabel
-                  id='validation-basic-select'
-                  error={Boolean(errors.browser)}
-                  htmlFor='validation-basic-select'
-                >
-                  Browsers
-                </InputLabel>
                 <Controller
                   name='browser'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
-                    <Select
-                      value={value}
-                      label='Browsers'
-                      onChange={onChange}
-                      error={Boolean(errors.browser)}
-                      labelId='validation-basic-select'
-                      aria-describedby='validation-basic-select'
-                    >
-                      {allBrowsers.map(item => {
-                        return (
-                          <MenuItem value={item.browserId} key={item.browserId}>
-                            {item.browserName}
-                          </MenuItem>
-                        )
-                      })}
-                    </Select>
+                    <>
+                      <Select
+                        displayEmpty
+                        value={value}
+                        renderValue={value => {
+                          if (!value) {
+                            if (allBrowsers && defualtBrowser) {
+                              const b = allBrowsers.find(o => o.browserId == defualtBrowser.browserId)
+
+                              return b?.browserName
+                            }
+                          } else {
+                            const b = allBrowsers.find(o => o.browserId == value)
+
+                            return b?.browserName
+                          }
+                        }}
+                        onChange={onChange}
+                        error={Boolean(errors.browser)}
+                        labelId='validation-basic-select'
+                        aria-describedby='validation-basic-select'
+                      >
+                        {allBrowsers.map(item => {
+                          return (
+                            <MenuItem value={item.browserId} key={item.browserId}>
+                              {item.browserName}
+                            </MenuItem>
+                          )
+                        })}
+                      </Select>
+                    </>
                   )}
                 />
                 {errors.browser && (
