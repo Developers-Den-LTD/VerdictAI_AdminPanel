@@ -1,5 +1,10 @@
 const navigation = () => [
   {
+    title: 'dashboard',
+    icon: 'tabler:dashboard',
+    path: '/dashboard/'
+  },
+  {
     title: 'Admins',
     icon: 'tabler:smart-home',
     children: [
