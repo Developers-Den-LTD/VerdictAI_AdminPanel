@@ -18,8 +18,8 @@ import { GetAllUsers, getAllAbusers } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 
 const DataGrid = () => {
-  const [allAbusers, setAllAbusers] = useState(null)
-  const [allUsers, setAllUsers] = useState(null)
+  const [allAbusers, setAllAbusers] = useState([])
+  const [allUsers, setAllUsers] = useState([])
   const { getAuthToken } = useAuth()
 
   useEffect(() => {

@@ -45,6 +45,7 @@ const ChangePasswordValidationForm = () => {
     password: '',
     showPassword: false
   })
+  const { user } = useAuth()
 
   //** Get token from auth */
   const { getAuthToken } = useAuth()
@@ -66,7 +67,7 @@ const ChangePasswordValidationForm = () => {
   //** If there are no validation errors, call the create admin api */
   const onSubmit = data => {
     const { current_password, new_password } = data
-    const userName = router.query.userName
+    const userName = user.userName
     console.log(userName)
     ChangeAdminPassword(userName, current_password, new_password).then(res => {
       if (!res.error) {

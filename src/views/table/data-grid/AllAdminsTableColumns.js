@@ -31,7 +31,6 @@ import { DeleteAdmin } from 'Client/request'
 import { admin_signin } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 import toast from 'react-hot-toast'
-import { useRouter } from 'next/router'
 
 // ** renders client column
 const renderClient = params => {
@@ -54,7 +53,6 @@ const RowOptions = ({ id, newAdmin }) => {
   // ** State
   const { getAuthToken } = useAuth()
   const [open, setOpen] = useState(false)
-  const router = useRouter()
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -79,16 +77,8 @@ const RowOptions = ({ id, newAdmin }) => {
     })
   }
 
-  function handleChangePassword() {
-    router.push(`/dashboard/admins/change-password?userName=${id}`)
-  }
-
   return (
     <>
-      <MenuItem onClick={() => handleChangePassword()} sx={{ '& svg': { mr: 2 } }}>
-        <Icon icon='tabler:lock' fontSize={20} />
-        Change Password
-      </MenuItem>
       <MenuItem onClick={handleClickOpen} sx={{ '& svg': { mr: 2 } }}>
         <Icon icon='tabler:trash' fontSize={20} />
         Delete

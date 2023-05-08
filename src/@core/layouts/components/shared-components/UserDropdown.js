@@ -65,6 +65,10 @@ const UserDropdown = props => {
     handleDropdownClose()
   }
 
+  const handleChangePassword = () => {
+    router.push('/dashboard/settings/change-password')
+  }
+
   return (
     <Fragment>
       <Badge
@@ -110,6 +114,11 @@ const UserDropdown = props => {
             </Box>
           </Box>
         </Box>
+        <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
+        <MenuItemStyled onClick={handleChangePassword} sx={{ py: 2, '& svg': { mr: 2, fontSize: '1.375rem' } }}>
+          <Icon icon='tabler:lock' />
+          Change password
+        </MenuItemStyled>
         <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
         <MenuItemStyled onClick={handleLogout} sx={{ py: 2, '& svg': { mr: 2, fontSize: '1.375rem' } }}>
           <Icon icon='tabler:logout' />
