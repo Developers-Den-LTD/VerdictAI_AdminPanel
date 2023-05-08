@@ -80,7 +80,7 @@ const RowOptions = ({ id, newAdmin }) => {
   }
 
   function handleChangePassword() {
-    router.push('/dashboard/admins/change-password')
+    router.push(`/dashboard/admins/change-password?userName=${id}`)
   }
 
   return (

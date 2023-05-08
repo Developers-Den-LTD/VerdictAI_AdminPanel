@@ -61,7 +61,9 @@ export async function createAdmin(userName, name, password, token) {
     })
 }
 
-export async function ChangeAdminPassword(token, id, current_password, new_password) {
+export async function ChangeAdminPassword(id, current_password, new_password) {
+  console.log(id, current_password, new_password)
+
   var data = {
     username: id,
     current_password: current_password,
@@ -71,9 +73,6 @@ export async function ChangeAdminPassword(token, id, current_password, new_passw
   var config = {
     method: 'post',
     url: API_URL + 'change-password',
-    headers: {
-      'x-access-token': token
-    },
     data: data
   }
 

@@ -24,13 +24,14 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { createAdmin } from 'Client/request'
+import { ChangeAdminPassword, createAdmin } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
 
+import { useRouter } from 'next/router'
+
 const schema = yup.object().shape({
-  userName: yup.string().min(5).required(),
-  password: yup.string().min(5).required(),
-  name: yup.string().min(5).required()
+  current_password: yup.string().min(5).required(),
+  new_password: yup.string().min(5).required()
 })
 
 const defaultValues = {
@@ -47,6 +48,7 @@ const ChangePasswordValidationForm = () => {
 
   //** Get token from auth */
   const { getAuthToken } = useAuth()
+  const router = useRouter()
 
   // ** Hooks
   const {
@@ -63,21 +65,23 @@ const ChangePasswordValidationForm = () => {
 
   //** If there are no validation errors, call the create admin api */
   const onSubmit = data => {
-    const { current_password, new_password, name } = data
-    createAdmin('', current_password, new_password, getAuthToken()).then(res => {
+    const { current_password, new_password } = data
+    const userName = router.query.userName
+    console.log(userName)
+    ChangeAdminPassword(userName, current_password, new_password).then(res => {
       if (!res.error) {
-        toast.success(`Admin added with user name: ${userName}`, {
+        toast.success(`Admin password Successfully changed with user name: ${userName}`, {
           position: 'bottom-right'
         })
         resetField('current_password')
         resetField('new_password')
       } else {
-        toast.error(`Failed adding user: ${userName}`, {
+        toast.error(`Failed changing password: ${userName}`, {
           position: 'bottom-right'
         })
         setError('admin', {
           type: 'manual',
-          message: 'Admin with provided username already exists!'
+          message: 'Current password or new password validation is wrong!'
         })
         resetField('current_password')
         resetField('new_password')
