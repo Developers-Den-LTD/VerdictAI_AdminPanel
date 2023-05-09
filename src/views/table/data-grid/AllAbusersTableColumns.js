@@ -28,7 +28,7 @@ import toast from 'react-hot-toast'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 
-const RowOptions = ({ id }) => {
+const RowOptions = ({ id, status }) => {
   // ** State
   const { getAuthToken } = useAuth()
   const router = useRouter()
@@ -60,7 +60,7 @@ const RowOptions = ({ id }) => {
       </>
       <MenuItem onClick={handleBlock} sx={{ '& svg': { mr: 2 } }}>
         <Icon icon='tabler:user-off' fontSize={20} />
-        Block\Unblock
+        {status ? 'Block' : 'Unblock'}
       </MenuItem>
     </>
   )
@@ -113,7 +113,7 @@ const TableColumns = props => {
       minWidth: 140,
       field: 'actions',
       headerName: 'Actions',
-      renderCell: params => <RowOptions id={params.row.userName} />
+      renderCell: params => <RowOptions id={params.row.userName} status={params.row.isActive} />
     }
   ]
 

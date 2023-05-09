@@ -108,7 +108,7 @@ const ChangePasswordValidationForm = () => {
                       label='Current Password'
                       onChange={onChange}
                       placeholder='Enter Current Password'
-                      type='text'
+                      type='password'
                       error={Boolean(errors.name)}
                       aria-describedby='validation-basic-first-name'
                     />
