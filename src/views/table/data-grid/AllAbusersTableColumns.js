@@ -69,10 +69,21 @@ const RowOptions = ({ id, status }) => {
 const TableColumns = props => {
   const columns = [
     {
+      flex: 0.12,
+      minWidth: 80,
+      headerName: 'Name',
+      field: 'name',
+      renderCell: params => (
+        <Typography variant='body2' sx={{ color: 'text.primary' }}>
+          {params.row.firstName} {params.row.lastName}
+        </Typography>
+      )
+    },
+    {
       flex: 0.175,
       minWidth: 120,
-      headerName: 'userName',
-      field: 'userName',
+      headerName: 'Email',
+      field: 'email',
       renderCell: params => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
           {params.row.userName}
@@ -81,7 +92,7 @@ const TableColumns = props => {
     },
 
     {
-      flex: 0.1,
+      flex: 0.15,
       minWidth: 110,
       field: 'Total Abuse Searches',
       renderCell: params => {
