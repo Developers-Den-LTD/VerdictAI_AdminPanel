@@ -92,7 +92,7 @@ const TableColumns = props => {
     },
 
     {
-      flex: 0.15,
+      flex: 0.1,
       minWidth: 110,
       field: 'Total Abuse Searches',
       valueGetter: params => {
@@ -105,7 +105,7 @@ const TableColumns = props => {
 
         return (
           <Typography variant='body2' sx={{ color: 'text.primary' }}>
-            {b ? b.totalAbuseSearches : 'Not known'}
+            {b ? b.totalAbuseSearches : 0}
           </Typography>
         )
       }
