@@ -27,6 +27,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Icon from 'src/@core/components/icon'
 import { changeBrowser, createAdmin, getAllBrowsers, getDefualtBrowser } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
+import { FormControlLabel, FormGroup, Switch } from '@mui/material'
 
 const schema = yup.object().shape({
   browser: yup.string().required()
@@ -40,6 +41,13 @@ const ChangeBrowsersValidationForm = () => {
   //** get all browsers */
   const [allBrowsers, setAllBrowsers] = useState([])
   const [defualtBrowser, setDefualtBrowser] = useState(null)
+
+  // ** State
+  const [checked, setChecked] = useState(false)
+
+  const handleChange = event => {
+    setChecked(event.target.checked)
+  }
 
   //** Get token from auth */
   const { getAuthToken } = useAuth()
@@ -86,7 +94,7 @@ const ChangeBrowsersValidationForm = () => {
 
   return (
     <Card>
-      <CardHeader title='Browsers' />
+      <CardHeader title='All Search Engines' />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={5}>
@@ -98,7 +106,21 @@ const ChangeBrowsersValidationForm = () => {
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <>
-                      <Select
+                      <FormGroup col>
+                        {allBrowsers.map(item => {
+                          return (
+                            <>
+                              <FormControlLabel
+                                label={item.browserName == 'Select all' ? 'All Browsers' : item.browserName}
+                                control={<Switch />}
+                                value={item.browserId}
+                                key={item.browserId}
+                              />
+                            </>
+                          )
+                        })}
+                      </FormGroup>
+                      {/* <Select
                         displayEmpty
                         value={value}
                         renderValue={value => {
@@ -106,7 +128,7 @@ const ChangeBrowsersValidationForm = () => {
                             if (allBrowsers && defualtBrowser) {
                               const b = allBrowsers.find(o => o.browserId == defualtBrowser.browserId)
                               if (b?.browserName == 'Select all') {
-                                return 'All Browsers'
+                                return 'All Search Engines'
                               } else {
                                 return b?.browserName
                               }
@@ -114,7 +136,7 @@ const ChangeBrowsersValidationForm = () => {
                           } else {
                             const b = allBrowsers.find(o => o.browserId == value)
                             if (b?.browserName == 'Select all') {
-                              return 'All Browsers'
+                              return 'All Search Engines'
                             } else {
                               return b?.browserName
                             }
@@ -132,7 +154,7 @@ const ChangeBrowsersValidationForm = () => {
                             </MenuItem>
                           )
                         })}
-                      </Select>
+                      </Select> */}
                     </>
                   )}
                 />

@@ -21,9 +21,9 @@ const navigation = () => [
     ]
   },
   {
-    title: 'Change Browsers',
+    title: 'Search Engines',
     icon: 'tabler:browser',
-    path: '/dashboard/change-browsers'
+    path: '/dashboard/change-search-engine'
   },
   {
     title: 'Query Limits',

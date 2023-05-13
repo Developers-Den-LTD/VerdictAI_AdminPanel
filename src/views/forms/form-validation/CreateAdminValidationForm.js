@@ -26,17 +26,20 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Icon from 'src/@core/components/icon'
 import { createAdmin } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
+import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
 
 const schema = yup.object().shape({
   userName: yup.string().min(5).required(),
   password: yup.string().min(5).required(),
-  name: yup.string().min(5).required()
+  name: yup.string().min(5).required(),
+  isSuperAdmin: yup.boolean()
 })
 
 const defaultValues = {
   userName: '',
   name: '',
-  password: ''
+  password: '',
+  isSuperAdmin: false
 }
 
 const CreateAdminValidationForm = () => {
@@ -45,6 +48,7 @@ const CreateAdminValidationForm = () => {
     password: '',
     showPassword: false
   })
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false)
 
   //** Get token from auth */
   const { getAuthToken } = useAuth()
@@ -64,7 +68,9 @@ const CreateAdminValidationForm = () => {
 
   //** If there are no validation errors, call the create admin api */
   const onSubmit = data => {
-    const { userName, password, name } = data
+    const { userName, password, name, isSuperAdmin } = data
+
+    return console.log(isSuperAdmin)
     createAdmin(userName, name, password, getAuthToken()).then(res => {
       if (!res.error) {
         toast.success(`Admin added with user name: ${userName}`, {
@@ -182,6 +188,24 @@ const CreateAdminValidationForm = () => {
                     This field is required
                   </FormHelperText>
                 )}
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl error={Boolean(errors.isSuperAdmin)}>
+                <FormLabel>Create Super-admin?</FormLabel>
+                <Controller
+                  name='isSuperAdmin'
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <FormControlLabel
+                      value={value}
+                      onChange={onChange}
+                      label='Super-admin'
+                      sx={errors.isSuperAdmin ? { color: 'error.main' } : null}
+                      control={<Radio sx={errors.isSuperAdmin ? { color: 'error.main' } : null} />}
+                    />
+                  )}
+                />
               </FormControl>
             </Grid>
             <Grid item xs={12}>

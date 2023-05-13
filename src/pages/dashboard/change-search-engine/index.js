@@ -19,10 +19,10 @@ const ChangeBrowser = () => {
         <PageHeader
           title={
             <Typography variant='h5'>
-              <MuiLink>Browsers</MuiLink>
+              <MuiLink>Search Engines</MuiLink>
             </Typography>
           }
-          subtitle={<Typography variant='body2'>Change the browser for unregistered users</Typography>}
+          subtitle={<Typography variant='body2'>Change the search engine for unregistered users</Typography>}
         />
         <Grid item xs={12}>
           <ChangeBrowsersValidationForm />
