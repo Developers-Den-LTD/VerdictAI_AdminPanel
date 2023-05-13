@@ -61,6 +61,40 @@ export async function createAdmin(userName, name, password, token) {
     })
 }
 
+//create a new super-admin function call
+export async function createSuperAdmin(userName, name, password, token) {
+  var data = {
+    username: userName,
+    password: password,
+    name: name
+  }
+
+  var config = {
+    method: 'post',
+    url: API_URL + 'create-super-admin',
+    headers: {
+      'x-access-token': token
+    },
+    data: data
+  }
+
+  return axios(config)
+    .then(response => {
+      if (response.data.responseCode == 2000) {
+        console.log('in client', response)
+
+        return true
+      } else {
+        return { error: 'Some error occured!:' + response.data.responseCode }
+      }
+    })
+    .catch(error => {
+      console.log(error)
+
+      return { error: 'Some error occured!:' + error }
+    })
+}
+
 export async function ChangeAdminPassword(id, current_password, new_password) {
   console.log(id, current_password, new_password)
 

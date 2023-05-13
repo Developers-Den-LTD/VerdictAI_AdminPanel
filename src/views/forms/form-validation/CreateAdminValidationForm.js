@@ -24,22 +24,20 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { createAdmin } from 'Client/request'
+import { createAdmin, createSuperAdmin } from 'Client/request'
 import { useAuth } from 'src/hooks/useAuth'
-import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
+import { FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup, Switch } from '@mui/material'
 
 const schema = yup.object().shape({
   userName: yup.string().min(5).required(),
   password: yup.string().min(5).required(),
-  name: yup.string().min(5).required(),
-  isSuperAdmin: yup.boolean()
+  name: yup.string().min(5).required()
 })
 
 const defaultValues = {
   userName: '',
   name: '',
-  password: '',
-  isSuperAdmin: false
+  password: ''
 }
 
 const CreateAdminValidationForm = () => {
@@ -68,30 +66,52 @@ const CreateAdminValidationForm = () => {
 
   //** If there are no validation errors, call the create admin api */
   const onSubmit = data => {
-    const { userName, password, name, isSuperAdmin } = data
-
-    return console.log(isSuperAdmin)
-    createAdmin(userName, name, password, getAuthToken()).then(res => {
-      if (!res.error) {
-        toast.success(`Admin added with user name: ${userName}`, {
-          position: 'bottom-right'
-        })
-        resetField('userName')
-        resetField('name')
-        resetField('password')
-      } else {
-        toast.error(`Failed adding user: ${userName}`, {
-          position: 'bottom-right'
-        })
-        setError('admin', {
-          type: 'manual',
-          message: 'Admin with provided username already exists!'
-        })
-        resetField('userName')
-        resetField('name')
-        resetField('password')
-      }
-    })
+    const { userName, password, name } = data
+    if (!isSuperAdmin) {
+      createAdmin(userName, name, password, getAuthToken()).then(res => {
+        if (!res.error) {
+          toast.success(`Admin added with user name: ${userName}`, {
+            position: 'bottom-right'
+          })
+          resetField('userName')
+          resetField('name')
+          resetField('password')
+        } else {
+          toast.error(`Failed adding user: ${userName}`, {
+            position: 'bottom-right'
+          })
+          setError('admin', {
+            type: 'manual',
+            message: 'Admin with provided username already exists!'
+          })
+          resetField('userName')
+          resetField('name')
+          resetField('password')
+        }
+      })
+    } else {
+      createSuperAdmin(userName, name, password, getAuthToken()).then(res => {
+        if (!res.error) {
+          toast.success(`Super-admin added with user name: ${userName}`, {
+            position: 'bottom-right'
+          })
+          resetField('userName')
+          resetField('name')
+          resetField('password')
+        } else {
+          toast.error(`Failed adding Super-admin: ${userName}`, {
+            position: 'bottom-right'
+          })
+          setError('admin', {
+            type: 'manual',
+            message: 'Super-admin with provided username already exists!'
+          })
+          resetField('userName')
+          resetField('name')
+          resetField('password')
+        }
+      })
+    }
   }
 
   return (
@@ -100,7 +120,7 @@ const CreateAdminValidationForm = () => {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={5}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={8}>
               <FormControl fullWidth>
                 <Controller
                   name='userName'
@@ -126,7 +146,7 @@ const CreateAdminValidationForm = () => {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={8}>
               <FormControl fullWidth>
                 <Controller
                   name='name'
@@ -151,7 +171,7 @@ const CreateAdminValidationForm = () => {
                 )}
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={8}>
               <FormControl fullWidth>
                 <InputLabel htmlFor='validation-basic-password' error={Boolean(errors.password)}>
                   Password
@@ -191,21 +211,21 @@ const CreateAdminValidationForm = () => {
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <FormControl error={Boolean(errors.isSuperAdmin)}>
+              <FormControl>
                 <FormLabel>Create Super-admin?</FormLabel>
-                <Controller
-                  name='isSuperAdmin'
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                    <FormControlLabel
-                      value={value}
-                      onChange={onChange}
-                      label='Super-admin'
-                      sx={errors.isSuperAdmin ? { color: 'error.main' } : null}
-                      control={<Radio sx={errors.isSuperAdmin ? { color: 'error.main' } : null} />}
-                    />
-                  )}
-                />
+                <FormGroup col>
+                  <FormControlLabel
+                    label='Super-admin'
+                    control={
+                      <Switch
+                        checked={isSuperAdmin}
+                        onChange={event => {
+                          setIsSuperAdmin(event.target.checked)
+                        }}
+                      />
+                    }
+                  />
+                </FormGroup>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
