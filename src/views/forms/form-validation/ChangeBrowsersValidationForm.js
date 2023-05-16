@@ -83,7 +83,10 @@ const ChangeBrowsersValidationForm = () => {
 
   useEffect(() => {
     getAllBrowsers(getAuthToken()).then(res => {
-      setAllBrowsers(res.data)
+      const array = res.data
+      array.push({ browserId: 123456, browserName: 'Twitter' }, { browserId: 34123456, browserName: 'Reddit' })
+      setAllBrowsers(array)
+      console.log(res.data)
     })
     getDefualtBrowser(getAuthToken()).then(res => {
       setDefualtBrowser(res.data)
@@ -108,16 +111,18 @@ const ChangeBrowsersValidationForm = () => {
                     <>
                       <FormGroup col>
                         {allBrowsers.map(item => {
-                          return (
-                            <>
-                              <FormControlLabel
-                                label={item.browserName == 'Select all' ? 'All Browsers' : item.browserName}
-                                control={<Switch />}
-                                value={item.browserId}
-                                key={item.browserId}
-                              />
-                            </>
-                          )
+                          if (item.browserName != 'Select all') {
+                            return (
+                              <>
+                                <FormControlLabel
+                                  label={item.browserName == 'Select all' ? 'All Browsers' : item.browserName}
+                                  control={<Switch />}
+                                  value={item.browserId}
+                                  key={item.browserId}
+                                />
+                              </>
+                            )
+                          }
                         })}
                       </FormGroup>
                       {/* <Select
