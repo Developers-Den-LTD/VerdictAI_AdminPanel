@@ -90,11 +90,23 @@ const TableColumns = props => {
         </Typography>
       )
     },
+    {
+      flex: 0.09,
+      minWidth: 120,
+      headerName: 'All Searches',
+      field: 'All Searches',
+      valueGetter: params => params.row.totalSearches,
+      renderCell: params => (
+        <Typography variant='body2' sx={{ color: 'text.primary' }}>
+          {params.row.totalSearches}
+        </Typography>
+      )
+    },
 
     {
       flex: 0.1,
       minWidth: 110,
-      field: 'Total Abuse Searches',
+      field: 'Abuse Searches',
       valueGetter: params => {
         const b = props.allAbusers.find(o => o.userName == params.row.userName)
 
