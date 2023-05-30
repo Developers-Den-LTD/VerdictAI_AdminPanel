@@ -177,19 +177,17 @@ export async function getDefualtBrowser(token) {
 }
 
 //change browsers for unregistered users
-export async function changeBrowser(id, token) {
-  var data = {
-    browser_id: id
-  }
-
+export async function changeBrowser(data, token) {
   var config = {
     method: 'post',
-    url: API_URL + 'change-browser',
+    url: API_URL + 'change-browser-status',
     headers: {
       'x-access-token': token
     },
     data: data
   }
+
+  console.log(config)
 
   return axios(config)
     .then(response => {

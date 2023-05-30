@@ -6,22 +6,14 @@ import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import CardHeader from '@mui/material/CardHeader'
-import InputLabel from '@mui/material/InputLabel'
-import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
 import FormHelperText from '@mui/material/FormHelperText'
-import InputAdornment from '@mui/material/InputAdornment'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
 
 // ** Third Party Imports
 import toast from 'react-hot-toast'
 
 import { useForm, Controller } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -29,25 +21,10 @@ import { changeBrowser, createAdmin, getAllBrowsers, getDefualtBrowser } from 'C
 import { useAuth } from 'src/hooks/useAuth'
 import { FormControlLabel, FormGroup, Switch } from '@mui/material'
 
-const schema = yup.object().shape({
-  browser: yup.string().required()
-})
-
-const defaultValues = {
-  browser: ''
-}
-
 const ChangeBrowsersValidationForm = () => {
   //** get all browsers */
   const [allBrowsers, setAllBrowsers] = useState([])
   const [defualtBrowser, setDefualtBrowser] = useState(null)
-
-  // ** State
-  const [checked, setChecked] = useState(false)
-
-  const handleChange = event => {
-    setChecked(event.target.checked)
-  }
 
   //** Get token from auth */
   const { getAuthToken } = useAuth()
@@ -59,21 +36,33 @@ const ChangeBrowsersValidationForm = () => {
     handleSubmit,
     resetField,
     formState: { errors }
-  } = useForm({ defaultValues, mode: 'onBlur', resolver: yupResolver(schema) })
+  } = useForm({ mode: 'onBlur' })
 
   //** If there are no validation errors, call the create admin api */
-  const onSubmit = data => {
-    const { browser } = data
-    console.log(browser)
-    changeBrowser(browser, getAuthToken()).then(res => {
-      let browserObj = allBrowsers.find(o => o.browserId == browser)
+  const onSubmit = e => {
+    e.preventDefault()
+    var browserIds = []
+    var browserStatus = []
+    allBrowsers.map(browser => {
+      browserIds.push(browser.browserId)
+      browserStatus.push(browser.isActive)
+    })
+
+    //** Making paylaod for the api */
+    const payload = {
+      browser_id: browserIds,
+      status: browserStatus
+    }
+
+    console.log(payload)
+    changeBrowser(payload, getAuthToken()).then(res => {
       if (!res.error) {
-        toast.success(`Successfully Changed browser for unregistered users to: ${browserObj.browserName}`, {
+        toast.success(`Successfully Changed browser for unregistered users`, {
           position: 'bottom-right'
         })
         resetField('browser')
       } else {
-        toast.error(`Failed while Changing browser for unregistered users to: ${browserObj.browserName}`, {
+        toast.error(`Failed while Changing browser for unregistered users`, {
           position: 'bottom-right'
         })
         resetField('browser')
@@ -84,13 +73,10 @@ const ChangeBrowsersValidationForm = () => {
   useEffect(() => {
     getAllBrowsers(getAuthToken()).then(res => {
       const array = res.data
-      array.push({ browserId: 123456, browserName: 'Twitter' }, { browserId: 34123456, browserName: 'Reddit' })
       setAllBrowsers(array)
-      console.log(res.data)
     })
     getDefualtBrowser(getAuthToken()).then(res => {
       setDefualtBrowser(res.data)
-      console.log(res.data)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -99,75 +85,29 @@ const ChangeBrowsersValidationForm = () => {
     <Card>
       <CardHeader title='All Search Engines' />
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           <Grid container spacing={5}>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
-                <Controller
-                  name='browser'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <>
-                      <FormGroup col>
-                        {allBrowsers.map(item => {
-                          if (item.browserName != 'Select all') {
-                            return (
-                              <>
-                                <FormControlLabel
-                                  label={item.browserName == 'Select all' ? 'All Browsers' : item.browserName}
-                                  control={<Switch />}
-                                  value={item.browserId}
-                                  key={item.browserId}
-                                />
-                              </>
-                            )
+                <FormGroup>
+                  {allBrowsers.map((item, index) => {
+                    return (
+                      <div key={index}>
+                        <FormControlLabel
+                          label={item.browserName}
+                          control={
+                            <Switch
+                              defaultChecked={item.isActive}
+                              onChange={() => (allBrowsers[index].isActive = !allBrowsers[index].isActive)}
+                            />
                           }
-                        })}
-                      </FormGroup>
-                      {/* <Select
-                        displayEmpty
-                        value={value}
-                        renderValue={value => {
-                          if (!value) {
-                            if (allBrowsers && defualtBrowser) {
-                              const b = allBrowsers.find(o => o.browserId == defualtBrowser.browserId)
-                              if (b?.browserName == 'Select all') {
-                                return 'All Search Engines'
-                              } else {
-                                return b?.browserName
-                              }
-                            }
-                          } else {
-                            const b = allBrowsers.find(o => o.browserId == value)
-                            if (b?.browserName == 'Select all') {
-                              return 'All Search Engines'
-                            } else {
-                              return b?.browserName
-                            }
-                          }
-                        }}
-                        onChange={onChange}
-                        error={Boolean(errors.browser)}
-                        labelId='validation-basic-select'
-                        aria-describedby='validation-basic-select'
-                      >
-                        {allBrowsers.map(item => {
-                          return (
-                            <MenuItem value={item.browserId} key={item.browserId}>
-                              {item.browserName == 'Select all' ? 'All Browsers' : item.browserName}
-                            </MenuItem>
-                          )
-                        })}
-                      </Select> */}
-                    </>
-                  )}
-                />
-                {errors.browser && (
-                  <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-select'>
-                    This field is required
-                  </FormHelperText>
-                )}
+                          value={item.browserId}
+                          key={item.browserId}
+                        />
+                      </div>
+                    )
+                  })}
+                </FormGroup>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
@@ -176,7 +116,7 @@ const ChangeBrowsersValidationForm = () => {
                   {errors.admin.message}
                 </FormHelperText>
               )}
-              <Button size='large' type='submit' variant='contained'>
+              <Button size='large' type='submit' variant='contained' onClick={e => onSubmit(e)}>
                 Submit
               </Button>
             </Grid>
